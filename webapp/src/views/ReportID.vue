@@ -1,10 +1,16 @@
 <template>
-  <v-container class="mb-16">
-    <h1 class="text-center mt-4">Report a New ALPR</h1>
+  <Hero
+    imageUrl="/id.webp"
+    title="Report using iD" 
+    description="Add and edit ALPRs using OSM's powerful web-based editor."
+  />
 
-    <p>
-      If you've spotted an ALPR in your area, you can help us track it by reporting it to OpenStreetMap, where we source our information. Here's how you can do it:
-    </p>
+  <!-- TODO: make sure the stepper saves its progress properly after the route refactoring -->
+
+  <v-container class="mb-16">
+    <h1 class="text-center">
+      Editing the Map
+    </h1>
 
     <v-stepper-vertical color="rgb(18, 151, 195)" v-model="step" flat non-linear class="my-8" edit-icon="mdi-home">
       <template v-slot:default="{ step }: { step: any }">
@@ -106,30 +112,16 @@
             </p>
           </v-alert>
         </v-stepper-vertical-item>
-
-        <v-stepper-vertical-item
-          class="transparent"
-          :complete="step > 6"
-          title="Hang a Sign"
-          value="6"
-          editable
-        >
-          <p>
-            Download our <a href="/deflock-poster.pdf" target="_blank">ALPR sign</a> and hang it near the ALPR to help raise awareness about the device. Be sure to follow all local laws and regulations when hanging signs.
-          </p>
-        </v-stepper-vertical-item>
       </template>
     </v-stepper-vertical>
   </v-container>
-
-  <Footer />
 </template>
 
 <script setup lang="ts">
+import Hero from '@/components/layout/Hero.vue';
 import { ref, onMounted, watch } from 'vue';
 import OSMTagSelector from '@/components/OSMTagSelector.vue';
 import { VStepperVerticalItem, VStepperVertical } from 'vuetify/labs/components';
-import Footer from '@/components/layout/Footer.vue';
 
 const step = ref(parseInt(localStorage.getItem('currentStep') || '1'));
 

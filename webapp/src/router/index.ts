@@ -52,11 +52,34 @@ const router = createRouter({
     },
     {
       path: '/report',
-      name: 'report',
-      component: () => import('../views/ReportView.vue'),
-      meta: {
-        title: 'Report an ALPR | DeFlock'
-      }
+      name: 'reportChoose',
+      component: () => import('../views/ReportBase.vue'),
+      children: [
+        {
+          path: '',
+          name: 'report',
+          component: () => import('../views/ReportChoose.vue'),
+          meta: {
+            title: 'Report an ALPR | DeFlock'
+          },
+        },
+        {
+          path: '/report/id',
+          name: 'reportID',
+          component: () => import('../views/ReportID.vue'),
+          meta: {
+            title: 'Report using iD | DeFlock'
+          }
+        },
+        {
+          path: '/report/every-door',
+          name: 'reportEveryDoor',
+          component: () => import('../views/ReportEveryDoor.vue'),
+          meta: {
+            title: 'Report using Every Door | DeFlock'
+          }
+        },
+      ]
     },
     {
       path: '/operators',
