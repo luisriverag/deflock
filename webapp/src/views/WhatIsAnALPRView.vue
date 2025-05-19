@@ -30,6 +30,8 @@
       </v-col>
     </v-row>
 
+    <!-- TODO: why is this in a separate section? -->
+
     <h2>Common Vendors</h2>
     <ul class="serif mb-16">
       <li>
@@ -73,6 +75,11 @@ const vendors = [
     vendor: 'Motorola/Vigilant',
     count: 4,
     urlScheme: '/alprs/motorola-{index}.jpg',
+  },
+  {
+    vendor: 'Genetec',
+    count: 3,
+    urlScheme: '/alprs/genetec-{index}.webp',
   },
   {
     vendor: 'Leonardo/ELSAG',
