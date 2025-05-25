@@ -34,8 +34,8 @@
           camera:type=fixed<br>
           surveillance=public<br>
           surveillance:zone=traffic<br>
-          manufacturer=<span class="highlight">{{ selectedBrand.name }}</span><br>
-          manufacturer:wikidata=<span class="highlight">{{ selectedBrand.wikidata }}</span><br>
+          manufacturer=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.name }}</span><br>
+          manufacturer:wikidata=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.wikidata }}</span><br>
         </DFCode>
 
         <h5 class="text-center mt-4 serif">and if operator is known</h5>
@@ -89,13 +89,17 @@ const alprBrands: WikidataItem[] = [
     exampleImage: '/alprs/neology-2.jpg',
   },
   {
-    name: 'brand goes here',
+    name: '[Enter Manufacturer]',
     nickname: 'Other',
-    wikidata: 'wikidata goes here',
+    wikidata: '[Enter WikiData ID]',
     exampleImage: '/other-1.jpeg',
   }
 ];
 const selectedBrand: Ref<WikidataItem> = ref(alprBrands[0]);
+
+function highlightClass(item: WikidataItem): string {
+  return item.nickname === 'Other' ? 'placeholder' : 'highlight';
+}
 
 </script>
 
