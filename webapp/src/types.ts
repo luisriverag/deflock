@@ -7,8 +7,8 @@ export interface ALPR {
 };
 
 export interface WikidataItem {
-  name: string;
+  name?: string;
   nickname: string;
-  wikidata: string;
+  wikidata?: string;
   exampleImage: string|undefined;
 }

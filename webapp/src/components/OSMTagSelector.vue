@@ -30,16 +30,13 @@
         <DFCode>
           man_made=surveillance<br>
           surveillance:type=ALPR<br>
-          camera:mount=pole<br>
           camera:type=fixed<br>
-          surveillance=public<br>
-          surveillance:zone=traffic<br>
-          manufacturer=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.name }}</span><br>
-          manufacturer:wikidata=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.wikidata }}</span><br>
+          <span v-if="selectedBrand.name">manufacturer=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.name }}</span><br></span>
+          <span v-if="selectedBrand.wikidata">manufacturer:wikidata=<span :class="highlightClass(selectedBrand)">{{ selectedBrand.wikidata }}</span><br></span>
         </DFCode>
 
         <h5 class="text-center mt-4 serif">and if operator is known</h5>
-        <DFCode>
+        <DFCode :show-copy-button="false">
           operator=<span class="placeholder">[Enter operator name]</span><br>
           operator:wikidata=<span class="placeholder">[Enter WikiData ID]</span>
         </DFCode>
@@ -85,13 +82,13 @@ const alprBrands: WikidataItem[] = [
   {
     name: 'Neology, Inc.',
     nickname: 'Neology',
-    wikidata: 'Q130958232',
+    wikidata: undefined,
     exampleImage: '/alprs/neology-2.jpg',
   },
   {
-    name: '[Enter Manufacturer]',
+    name: undefined,
     nickname: 'Other',
-    wikidata: '[Enter WikiData ID]',
+    wikidata: undefined,
     exampleImage: '/other-1.jpeg',
   }
 ];

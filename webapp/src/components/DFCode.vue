@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative">
-    <v-btn color="white" @click="copyToClipboard" icon variant="plain" flat class="copy-button">
+    <v-btn v-if="showCopyButton" color="white" @click="copyToClipboard" icon variant="plain" flat class="copy-button">
       <v-icon class="copy-icon-with-shadow">mdi-content-copy</v-icon>
     </v-btn>
     <code ref="codeContent">
@@ -22,6 +22,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+
+defineProps({
+  showCopyButton: {
+    type: Boolean,
+    default: true
+  }
+});
 
 const codeContent = ref<HTMLElement | null>(null);
 const snackbarOpen = ref(false);
