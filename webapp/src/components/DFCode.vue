@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative">
     <v-btn color="white" @click="copyToClipboard" icon variant="plain" flat class="copy-button">
-      <v-icon>mdi-content-copy</v-icon>
+      <v-icon class="copy-icon-with-shadow">mdi-content-copy</v-icon>
     </v-btn>
     <code ref="codeContent">
       <slot></slot>
@@ -48,6 +48,11 @@ code {
 
 code {
   white-space: nowrap;
+}
+
+.copy-icon-with-shadow {
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 1));
+  /* Adjust shadow values as needed: horizontal-offset vertical-offset blur-radius color */
 }
 
 .copy-button {

@@ -40,9 +40,14 @@
 
         <h5 class="text-center mt-4 serif">and if operator is known</h5>
         <DFCode>
-          operator=<span class="highlight">(Police Dept/Owner)</span><br>
-          operator:wikidata=<span class="highlight">(WikiData ID)</span><br>
+          operator=<span class="placeholder">[Enter operator name]</span><br>
+          operator:wikidata=<span class="placeholder">[Enter WikiData ID]</span>
         </DFCode>
+        <div class="text-caption text-center mt-1">
+          <a href="https://www.wikidata.org/wiki/Wikidata:Main_Page" target="_blank" rel="noopener" class="text-decoration-none text-grey-darken-1">
+            What is WikiData? <v-icon size="x-small">mdi-open-in-new</v-icon>
+          </a>
+        </div>
       </v-col>
     </v-row>
 </template>
@@ -84,9 +89,9 @@ const alprBrands: WikidataItem[] = [
     exampleImage: '/alprs/neology-2.jpg',
   },
   {
-    name: '(brand goes here)',
+    name: 'brand goes here',
     nickname: 'Other',
-    wikidata: '(wikidata goes here)',
+    wikidata: 'wikidata goes here',
     exampleImage: '/other-1.jpeg',
   }
 ];
@@ -100,6 +105,19 @@ const selectedBrand: Ref<WikidataItem> = ref(alprBrands[0]);
   padding: 0.15rem;
   border-radius: 0.25rem;
   font-weight: bold;
+}
+
+.placeholder {
+  background-color: #ffe066;
+  color: #333;
+  padding: 0.15rem;
+  border-radius: 0.25rem;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.info-icon {
+  cursor: help;
 }
 
 .overlay {
