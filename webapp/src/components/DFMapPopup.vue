@@ -1,7 +1,12 @@
 <template>
-  <v-sheet width="220">
+  <v-sheet min-width="240">
     <!--  TODO: if a field is unknown, prompt user to edit it -->
-    <v-img cover width="100%" height="120px" src="/alprs/flock-3.jpg" />
+    <div class="position-relative">
+      <v-img v-if="imageUrl" cover width="100%" height="150px" :src="imageUrl" class="rounded mt-5" />
+      <div v-if="imageUrl" class="position-absolute bottom-0 left-0 right-0 text-center text-white text-caption" style="background: rgba(0, 0, 0, 0.5);">
+        {{ manufacturer }} ALPR
+      </div>
+    </div>
     <v-list density="compact" class="my-2">
       <v-list-item>
         <template v-slot:prepend>
@@ -18,11 +23,12 @@
           </span>
         </b>
 
-        <template v-slot:append>
+        <!-- TODO: add transparency portal link if exists -->
+        <!-- <template v-slot:append>
           <v-btn icon size="small" variant="text" :href="transparencyLink" target="_blank" color="primary">
             <v-icon icon="mdi-open-in-new"></v-icon>
           </v-btn>
-        </template>
+        </template> -->
       </v-list-item>
 
       <v-divider class="my-2" />
@@ -52,7 +58,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { PropType } from 'vue';
+import type { ComputedRef, PropType } from 'vue';
 import type { ALPR } from '@/types';
 import { VIcon, VList, VSheet, VListItem, VBtn, VImg, VListItemSubtitle, VDivider } from 'vuetify/components';
 
@@ -70,6 +76,18 @@ const manufacturer = computed(() => (
 const transparencyLink = computed(() => {
   // XXX: eventually get this from /api/operator-info?wikidata=Q1234
   return `https://transparency.flocksafety.com/boulder-co-pd`;
+});
+
+const imageUrl: ComputedRef<string|undefined> = computed(() => {
+  const mft2Url: Record<string, string> = {
+    'Flock Safety': '/alprs/flock-1.jpg',
+    'Motorola Solutions': '/alprs/motorola-4.jpg',
+    'Genetec': '/alprs/genetec-3.webp',
+    'Leonardo': '/alprs/elsag-1.jpg',
+    'Neology, Inc.': '/alprs/neology-2.jpg',
+  }
+
+  return mft2Url[manufacturer.value];
 });
 
 const abbreviatedOperator = computed(() => {
