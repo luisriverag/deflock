@@ -14,11 +14,10 @@
   </p>
   <p>
     Your help is crucial. Filing a public records request is easy, and your contribution will help us build a complete map of these surveillance networks. We'll even link you to several hundred <a target="_blank" href="https://www.muckrock.com/search/?q=Flock">examples to follow</a>.<sup>[1]</sup>
-
-    <footer class="text-grey-darken-2 mt-4">
-      <small><sup>[1]</sup> While these examples focus on Flock Safety, the process applies to all ALPR vendors. Flock is highlighted here because it is the most widely reported ALPR vendor in the US on OpenStreetMap at the time this was written.</small>
-    </footer>
   </p>
+  <footer class="serif text-grey-darken-2 mt-4">
+    <small><sup>[1]</sup> While these examples focus on Flock Safety, the process applies to all ALPR vendors. Flock is highlighted here because it is the most widely reported ALPR vendor in the US on OpenStreetMap at the time this was written.</small>
+  </footer>
 
   <v-divider class="my-8" />
 
@@ -33,13 +32,13 @@
     <li class="mb-4">
       <p>
         Browse <a href="https://www.muckrock.com/search/?q=Flock" target="_blank">Muckrock</a> for examples of public records requests related to ALPRs. Use these as templates to draft your own request. Here are some common requests you can adapt:
-        <ul>
-          <li>Right-of-Way Installation Permits (typically include a map of locations)</li>
-          <li>Invoices for ALPRs (contain count of cameras)</li>
-          <li>Contracts with ALPR vendors (show proof of usage)</li>
-          <li>Emails discussing ALPR installations</li>
-        </ul>
       </p>
+      <ul>
+        <li>Right-of-Way Installation Permits (typically include a map of locations)</li>
+        <li>Invoices for ALPRs (contain count of cameras)</li>
+        <li>Contracts with ALPR vendors (show proof of usage)</li>
+        <li>Emails discussing ALPR installations</li>
+      </ul>
 
       <p><b>If you need help tailoring this to your situation, appealing rejections, etc., ChatGPT is a great resource.</b></p>
     </li>
