@@ -22,7 +22,7 @@
           <v-icon size="x-large" color="primary" class="mb-2">mdi-square-edit-outline</v-icon>
           <v-list-item-title class="font-weight-bold">Add missing points!</v-list-item-title>
           <v-list-item-subtitle>
-            Know of a missing ALPR? <router-link to="/report">Contribute</router-link> to the map.
+            Know of a missing ALPR? <router-link to="/report/id">Contribute</router-link> to the map.
           </v-list-item-subtitle>
         </v-list-item>
       </v-list>
