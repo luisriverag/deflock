@@ -23,11 +23,11 @@ def fetch_alpr_surveillance_nodes(usOnly=False):
     return {"error": f"Failed to fetch data from Overpass API. Status code: {response.status_code}"}
 
 def lambda_handler(event, context):
-  us_alprs = fetch_alpr_surveillance_nodes('(area["ISO3166-1"="US"])')
+  # us_alprs = fetch_alpr_surveillance_nodes('(area["ISO3166-1"="US"])')
   worldwide_alprs = fetch_alpr_surveillance_nodes()
 
   all_alprs = {
-    'us': us_alprs,
+    # 'us': us_alprs,
     'worldwide': worldwide_alprs
   }
 

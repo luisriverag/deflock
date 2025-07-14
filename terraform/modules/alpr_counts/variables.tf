@@ -14,3 +14,15 @@ variable "deflock_stats_bucket" {
 variable "rate" {
   description = "Rate at which to run the Lambda function"
 }
+
+variable "aws_region" {
+  description = "The AWS region where resources will be created"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "aws_account_id" {
+  description = "The AWS account ID where resources will be created"
+  type        = string
+  default     = "912821578123"
+}
