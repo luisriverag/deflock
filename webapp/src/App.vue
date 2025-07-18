@@ -17,12 +17,15 @@ const items = [
   { title: 'Home', icon: 'mdi-home', to: '/' },
   { title: 'Map', icon: 'mdi-map', to: '/map' },
   { title: 'Learn', icon: 'mdi-school', to: '/what-is-an-alpr' },
-  { title: 'Submit Cameras', icon: 'mdi-map-marker-plus', to: '/report/id' },
-  { title: 'Public Records', icon: 'mdi-file-document', to: '/foia' },
-  { title: 'Wardriving', icon: 'mdi-car-connected', to: '/wardriving' },
   // { title: 'Known Operators', icon: 'mdi-police-badge', to: '/operators' },
   // { title: 'About', icon: 'mdi-information', to: '/about' },
   // { title: 'Feature Roadmap', icon: 'mdi-road-variant', to: '/roadmap' },
+]
+
+const contributeItems = [
+  { title: 'Submit Cameras', icon: 'mdi-map-marker-plus', to: '/report/id' },
+  { title: 'Public Records', icon: 'mdi-file-document', to: '/foia' },
+  { title: 'Wardriving', icon: 'mdi-car-connected', to: '/wardriving' },
 ]
 
 const metaItems = [
@@ -76,6 +79,19 @@ watch(() => theme.global.name.value, (newTheme) => {
             link
             :to="item.to"
           ><v-icon start>{{ item.icon }}</v-icon>{{ item.title }}</v-list-item>
+
+          <v-divider />
+
+          <v-list-subheader>Contribute</v-list-subheader>
+          <v-list-item
+            v-for="item in contributeItems"
+            :key="item.title"
+            link
+            :to="item.to"
+          >
+            <v-icon v-if="item.icon" start>{{ item.icon }}</v-icon>
+              <span style="vertical-align: middle;">{{ item.title }}</span>
+          </v-list-item>
           
           <v-divider />
           

@@ -58,10 +58,10 @@
       </v-expansion-panel-title>
       <v-expansion-panel-text>
         <p>
-          <b>There is little to no oversight for these systems</b>. While some police departments have implemented policies regarding the use of ALPRs, these policies are often weak and poorly enforced. Many agencies do not have any policies at all, and there is no requirement for transparency or accountability in how these systems are used.
+          <b>There is little to no oversight for these systems</b>. While some police departments <a target="_blank" href="https://search.libraryofleaks.org/datasets/61?cslimit=30&csq=ALPR#mode=search">have implemented policies</a> regarding the use of ALPRs, these policies are often weak and poorly enforced. Many agencies do not have any policies at all, and there is no requirement for transparency or accountability in how these systems are used.
         </p>
         <p>
-          While Flock Safety offers a <b>transparency portal</b> for their law enforcement customers, they allow their customers to cherry-pick what information is included or excluded from the portal. They also <b>lack any meaningful data</b>, often underreporting the number of agencies with access. Many activists believe the <b>hotlist hits section is inflated</b> to make it appear that the cameras are more effective than they actually are.
+          While Flock offers a <b>transparency portal</b> for their law enforcement customers, they allow their customers to cherry-pick what information is included or excluded from the portal. They also <b>lack any meaningful data</b>, often <a target="_blank" href="https://www.9news.com/article/news/local/denver-city-councilmembers-police-department-audit-license-plate-camera-data-usage/73-3777d34d-7723-4397-af37-716a6db6ebd9">underreporting the number of agencies with access</a>. Many activists believe the <b>hotlist hits section is inflated</b> to make it appear that the cameras are more effective than they actually are.
         </p>
       </v-expansion-panel-text>
     </v-expansion-panel>
