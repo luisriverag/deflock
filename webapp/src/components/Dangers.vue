@@ -42,6 +42,9 @@
           <li>
             In January 2025, Motorola Solutions' ALPR system was <a href="https://www.404media.co/researcher-turns-insecure-license-plate-cameras-into-open-source-surveillance-tool/" target="_blank">found to have a critical security flaw</a> that allowed anyone to access live data from their cameras. Data includes <b>license plate numbers, make, model, color, and timestamps</b>. A <b>live feed</b> of both cameras (color and infrared) was also available to stream using a web browser.
           </li>
+          <li>
+            In July 2025, <a target="_blank" href="https://nexanet.ai/blog/misconfigured-demo-exposed-flock-safetys-83000-camera-nationwide-tracking-system">Flock Safety exposed a misconfigured demo site</a> that included (1) their internal search interface and some source code, some of which reveals how they calculate confidence scores for vehicle tracking and (2) a live ArcGIS admin API key, which included access to over 50 private data layers.
+          </li>
         </ul>
       </v-expansion-panel-text>
     </v-expansion-panel>
@@ -83,7 +86,7 @@
         <ul>
           <li>
             <a href="https://www.404media.co/a-texas-cop-searched-license-plate-cameras-nationwide-for-a-woman-who-got-an-abortion/" target="_blank">
-              Texas police used Flock ALPRs to track an abortion seeker across state lines
+              Texas police used Flock ALPRs to track a woman who had an abortion across state lines
             </a>
           </li>
           <li>
