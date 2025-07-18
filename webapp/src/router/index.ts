@@ -47,7 +47,7 @@ const router = createRouter({
       name: 'what-is-an-alpr',
       component: () => import('../views/WhatIsAnALPRView.vue'),
       meta: {
-        title: 'What is an ALPR | DeFlock'
+        title: 'Learn | DeFlock'
       }
     },
     {
@@ -68,7 +68,7 @@ const router = createRouter({
           name: 'reportID',
           component: () => import('../views/ReportID.vue'),
           meta: {
-            title: 'Report using iD | DeFlock'
+            title: 'Submit Cameras | DeFlock'
           }
         },
         {
@@ -149,6 +149,14 @@ const router = createRouter({
       path: '/foia',
       name: 'foia',
       component: () => import('../views/FOIA.vue'),
+    },
+    {
+      path: '/press',
+      name: 'press',
+      component: () => import('../views/Press.vue'),
+      meta: {
+        title: 'Press | DeFlock'
+      }
     },
     {
       path: '/:pathMatch(.*)*',

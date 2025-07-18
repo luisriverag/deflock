@@ -22,7 +22,7 @@
           max-width="100%"
           class="my-4"
         ></v-img>
-        <v-btn to="/what-is-an-alpr#photos" color="grey-darken-2" variant="text" size="small"><v-icon start>mdi-image-multiple</v-icon> See All Photos</v-btn>
+        <v-btn to="/what-is-an-alpr#photos" color="#1297C3" variant="tonal" size="small"><v-icon start>mdi-image-multiple</v-icon> See All Photos</v-btn>
       </v-col>
     
       <v-col cols="12" sm="6">

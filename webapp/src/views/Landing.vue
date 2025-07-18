@@ -37,7 +37,7 @@
 
     <h2 class="display-2 mb-4">The Dangers of ALPRs</h2>
     <p class="px-6">
-      ALPRs are a threat to your privacy and civil liberties. They're regularly used to track everyone's movements without a warrant, probable cause, or reasonable suspicion. Law enforcement agencies use them for various purposes, no matter how unethical, including <a target="_blank" href="https://www.404media.co/ice-taps-into-nationwide-ai-enabled-camera-network-data-shows/">ICE raids</a> and <a target="_blank" href="https://www.404media.co/a-texas-cop-searched-license-plate-cameras-nationwide-for-a-woman-who-got-an-abortion/">tracking abortion seekers</a> across state lines.
+      ALPRs are a threat to your privacy and civil liberties. They're regularly used to track everyone's movements without a warrant, probable cause, or reasonable suspicion. Law enforcement agencies use them for various purposes, including <a target="_blank" href="https://www.404media.co/ice-taps-into-nationwide-ai-enabled-camera-network-data-shows/">ICE raids</a> and <a target="_blank" href="https://www.404media.co/a-texas-cop-searched-license-plate-cameras-nationwide-for-a-woman-who-got-an-abortion/">tracking abortion seekers</a> across state lines.
     </p>
     
     <v-row class="align-center mt-4">
@@ -85,7 +85,7 @@
   <!-- Map Section -->
   <v-container fluid class="map-section py-10 text-center">
     <h2 class="display-2 mb-4">Explore ALPR Locations Near You</h2>
-    <v-btn color="white" large @click="goToMap">
+    <v-btn color="white" large @click="goToMap({ withCurrentLocation: true })">
       View the Map
       <v-icon end>mdi-map</v-icon>
     </v-btn>

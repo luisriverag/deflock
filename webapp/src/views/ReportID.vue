@@ -1,26 +1,14 @@
 <template>
   <Hero
     imageUrl="/id.webp"
-    title="Report using iD" 
-    description="Add and edit ALPRs using OSM's powerful web-based editor."
+    title="Submit Cameras" 
+    description="Add or edit ALPRs using OSM's powerful web-based editor."
   />
 
   <v-container class="mb-16">
     <h1 class="text-center">
       Editing the Map
     </h1>
-
-    <v-alert
-      variant="elevated"
-      type="info"
-      class="my-6"
-      title="Easier Reporting Coming Soon!"
-      color="green"
-    >
-      <p>
-        We're working on an easier method for reporting ALPRs that will allow you to submit them with just one click. Stay tuned for updates!
-      </p>
-    </v-alert>
 
     <v-stepper-vertical color="rgb(18, 151, 195)" v-model="step" flat non-linear class="my-8" edit-icon="mdi-home">
       <template v-slot:default="{ step }: { step: any }">

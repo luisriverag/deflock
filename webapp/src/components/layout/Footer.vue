@@ -66,6 +66,7 @@
 </template>
 
 <script setup lang="ts">
+import { icon } from 'leaflet';
 import { computed } from 'vue';
 import { useTheme } from 'vuetify';
 const theme = useTheme();
@@ -76,6 +77,7 @@ const internalLinks = [
   { title: 'About', to: '/about', icon: 'mdi-information' },
   { title: 'Privacy Policy', to: '/privacy', icon: 'mdi-shield-lock' },
   { title: 'Terms of Service', to: '/terms', icon: 'mdi-file-document' },
+  { title: 'Press', to: '/press', icon: 'mdi-newspaper' },
   { title: 'Contact', to: '/contact', icon: 'mdi-email' },
 ];
 
