@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView, useRouter } from 'vue-router'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useTheme } from 'vuetify';
 
 const theme = useTheme();
@@ -11,7 +11,19 @@ const isFullscreen = computed(() => router.currentRoute.value?.query.fullscreen 
 function toggleTheme() {
   const newTheme = theme.global.name.value === 'dark' ? 'light' : 'dark';
   theme.global.name.value = newTheme;
+  localStorage.setItem('theme', newTheme);
 }
+
+onMounted(() => {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    theme.global.name.value = savedTheme;
+  } else {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    theme.global.name.value = prefersDark ? 'dark' : 'light';
+    localStorage.setItem('theme', theme.global.name.value);
+  }
+});
 
 const items = [
   { title: 'Home', icon: 'mdi-home', to: '/' },
@@ -63,9 +75,9 @@ watch(() => theme.global.name.value, (newTheme) => {
 
         <v-spacer></v-spacer>
 
-        <!-- <v-btn icon>
+        <v-btn icon>
           <v-icon @click="toggleTheme">mdi-theme-light-dark</v-icon>
-        </v-btn> -->
+        </v-btn>
       </v-app-bar>
 
       <v-navigation-drawer

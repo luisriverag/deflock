@@ -9,7 +9,7 @@
 
     <h2>Information We Collect</h2>
     <p>
-      DeFlock does not collect, store, or process any personal information about our users. We use local storage in your browser to anonymously identify first-time visitors for the purpose of showing an introductory message as well as to persist application state. This data cannot be used to identify you personally. We do not use cookies, analytics, or tracking technologies on our website.
+      DeFlock does not collect, store, or process any personal information about our users. We use local storage in your browser to anonymously identify first-time visitors for the purpose of showing an introductory message as well as to persist application state, including your dark/light theme preference. This data cannot be used to identify you personally. We do not use cookies, analytics, or tracking technologies on our website.
     </p>
 
     <h2>Third-Party Services</h2>

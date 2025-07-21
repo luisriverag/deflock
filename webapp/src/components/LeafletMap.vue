@@ -25,6 +25,7 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
+import { useTheme } from 'vuetify';
 
 const MARKER_COLOR = 'rgb(63,84,243)';
 
@@ -132,6 +133,8 @@ function createMarker(alpr: ALPR): Marker | CircleMarker {
   });
 }
 
+const theme = useTheme();
+
 function bindPopup(marker: L.CircleMarker | L.Marker, alpr: ALPR): L.CircleMarker | L.Marker {
   marker.bindPopup('');
 
@@ -149,7 +152,11 @@ function bindPopup(marker: L.CircleMarker | L.Marker, alpr: ALPR): L.CircleMarke
           }
         });
       }
-    }).use(createVuetify()).mount(popupContent);
+    }).use(createVuetify({
+      theme: {
+        defaultTheme: theme.global.name.value,
+      },
+    })).mount(popupContent);
 
     e.popup.setContent(popupContent);
   });
