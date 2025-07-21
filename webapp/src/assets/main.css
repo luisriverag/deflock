@@ -23,6 +23,11 @@ a:not([class]):hover {
   color: var(--df-text-color) !important;
 }
 
+.marker-cluster span {
+  /* changing to dark mode should not affect the map yet */
+  color: #000000 !important;
+}
+
 p {
   font-family: "PT Serif", serif;
   /* font-size: 1.1em; */
