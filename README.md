@@ -2,7 +2,7 @@
 
 Crowdsourced tool for locating and reporting ALPRs. [View Live Site](https://deflock.me).
 
-![DeFlock Screenshot](./webapp/public/deflock-screenshot.webp)
+![DeFlock Screenshot](./webapp/public/map-interface-nationwide.webp)
 
 ## Purpose
 
