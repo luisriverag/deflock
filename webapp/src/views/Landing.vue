@@ -120,7 +120,7 @@
 }
 
 .map-section {
-  background: url('/deflock-screenshot.webp') no-repeat center center;
+  background: url('/map-interface-nationwide.webp') no-repeat center center;
   background-size: cover;
   color: white;
   padding: 100px 0;
