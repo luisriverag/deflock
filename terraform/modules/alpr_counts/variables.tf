@@ -26,3 +26,8 @@ variable "aws_account_id" {
   type        = string
   default     = "912821578123"
 }
+
+variable "sns_topic_arn" {
+  description = "The ARN of the SNS topic for Lambda alarms"
+  type        = string
+}

@@ -89,3 +89,23 @@ resource "aws_cloudwatch_log_group" "lambda_log_group" {
   name              = "/aws/lambda/${aws_lambda_function.overpass_lambda.function_name}"
   retention_in_days = 14
 }
+
+resource "aws_sns_topic" "lambda_alarms" {
+  name = "${var.module_name}_lambda_alarms"
+}
+
+resource "aws_cloudwatch_metric_alarm" "lambda_error_alarm" {
+  alarm_name          = "${var.module_name}_execution_error"
+  alarm_description   = "An error has occurred while executing the ${var.module_name} Lambda"
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  dimensions          = {
+    FunctionName = aws_lambda_function.overpass_lambda.function_name
+  }
+  statistic           = "Sum"
+  period              = 86400 # 1 day
+  evaluation_periods  = 1
+  threshold           = 0
+  comparison_operator = "GreaterThanThreshold"
+  alarm_actions       = [var.sns_topic_arn]
+}

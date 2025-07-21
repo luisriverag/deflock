@@ -120,3 +120,22 @@ resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_logs_attachment" {
   role       = aws_iam_role.lambda_role.name
   policy_arn = aws_iam_policy.lambda_cloudwatch_logs_policy.arn
 }
+
+# Alarms for Failure
+
+resource "aws_cloudwatch_metric_alarm" "lambda_error_alarm" {
+  alarm_name          = "${var.module_name}_execution_error"
+  alarm_description   = "An error has occurred while executing the ${var.module_name} Lambda"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = 1
+  metric_name         = "Errors"
+  namespace           = "AWS/Lambda"
+  period              = 86400 # 1 day
+  statistic           = "Sum"
+  threshold           = 0
+  dimensions = {
+    FunctionName = aws_lambda_function.overpass_lambda.function_name
+  }
+
+  alarm_actions = [var.sns_topic_arn]
+}
