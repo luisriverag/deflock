@@ -39,6 +39,16 @@
     <p class="px-6">
       ALPRs are a threat to your privacy and civil liberties. They're regularly used to track everyone's movements without a warrant, probable cause, or reasonable suspicion. Law enforcement agencies use them for various purposes, including <a target="_blank" href="https://www.404media.co/ice-taps-into-nationwide-ai-enabled-camera-network-data-shows/">ICE raids</a> and <a target="_blank" href="https://www.404media.co/a-texas-cop-searched-license-plate-cameras-nationwide-for-a-woman-who-got-an-abortion/">tracking abortion seekers</a> across state lines.
     </p>
+    <p class="px-6 pt-6">
+      Learn more about how Flock, the most popular ALPR vendor<sup>1</sup>, is being used in your community on the independent site:
+      <a target="_blank" href="https://eyesonflock.com" style="text-decoration: underline;">
+        Eyes on Flock
+        <v-icon size="small">mdi-open-in-new</v-icon>
+      </a>.
+    </p>
+    <footer class="serif text-grey-darken-2 mt-4">
+      <small><sup>[1]</sup> This claim is based on an OSM Overpass API query conducted on 7/21/2025, which compared nodes tagged as manufactured or branded as Flock to the total count of ALPRs, revealing that Flock accounts for significantly over 50% of the share.</small>
+    </footer>
     
     <v-row class="align-center mt-4">
       <v-col cols="12" md="4" class="text-center">
