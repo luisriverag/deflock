@@ -72,7 +72,7 @@
       </v-expansion-panel-title>
       <v-expansion-panel-text>
         <p>
-          Several cities in the US have killed contracts for ALPRs, such as <a>Denver</a> and <a>Austin</a>. An effective strategy is to raise concerns in your community, build a group of advocates, and petition the city council not to extend the contract. This can be done through public comment at meetings and is most effective when there is a large enough group of concerned residents.
+          Several cities in the US have killed contracts for ALPRs, such as <a target="_blank" href="https://www.denver7.com/news/local-news/denver-city-council-rejects-contract-expansion-for-license-plate-recognition-cameras-in-the-city">Denver</a> and <a target="_blank" href="http://eff.org/deeplinks/2025/06/victory-austin-organizers-cancel-citys-flock-alpr-contract">Austin</a>. An effective strategy is to raise concerns in your community, build a group of advocates, and petition the city council not to extend the contract. This can be done through public comment at meetings and is most effective when there is a large enough group of concerned residents.
         </p>
         <p>
           <a target="_blank" href="https://youtu.be/YjaH_1Ia6NA">
