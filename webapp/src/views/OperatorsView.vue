@@ -2,7 +2,7 @@
   <v-container class="info-section" max-width="1000">
     <h2 id="community-datasets">Community Datasets</h2>
     <p>
-      Here are some datasets that have been shared with us by the community through various collection methods (FOIA requests, scraping, wardriving, etc.). If you have a dataset you'd like to share, please reach out to us <router-link to="/contact">here</router-link>.
+      Here are some datasets that have been shared with us by the community through various collection methods (FOIA requests, scraping, etc.). If you have a dataset you'd like to share, please reach out to us <router-link to="/contact">here</router-link>.
     </p>
     <p class="mb-4">
       If you'd like to report some of the ALPRs in these data sets so that they can be seen on the map, download the file and follow <router-link to="/report">these instructions</router-link>. Be sure to check that the cameras you're reporting are not already on the map. Please note that these datasets contain only approximate locations of cameras. You will need to verify the locations yourself.

@@ -45,7 +45,6 @@ const items = [
 const contributeItems = [
   { title: 'Submit Cameras', icon: 'mdi-map-marker-plus', to: '/report/id' },
   { title: 'Public Records', icon: 'mdi-file-document', to: '/foia' },
-  { title: 'Wardriving', icon: 'mdi-car-connected', to: '/wardriving' },
 ]
 
 const metaItems = [

@@ -90,14 +90,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/wardriving',
-      name: 'wardriving',
-      component: () => import('../views/Wardriving.vue'),
-      meta: {
-        title: 'Wardriving | DeFlock'
-      }
-    },
-    {
       path: '/contact',
       name: 'contact',
       component: () => import('../views/ContactView.vue'),
