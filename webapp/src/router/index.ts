@@ -90,6 +90,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/council',
+      name: 'council',
+      component: () => import('../views/CouncilView.vue'),
+      meta: {
+        title: 'Council | DeFlock'
+      }
+    },
+    {
       path: '/contact',
       name: 'contact',
       component: () => import('../views/ContactView.vue'),
