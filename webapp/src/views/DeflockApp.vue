@@ -20,10 +20,12 @@
                   color="black"
                   class="download-btn ios-btn"
                   prepend-icon="mdi-apple"
-                  href="https://apps.apple.com/app/deflock"
+                  :href="appLinks.ios"
                   target="_blank"
+                  :disabled="!appLinks.ios"
                 >
-                  Download for iOS
+                  <span v-if="appLinks.ios">Download for iOS</span>
+                  <span v-else>iOS Coming Soon</span>
                 </v-btn>
                 <v-btn
                   size="large"
@@ -31,10 +33,12 @@
                   color="black"
                   class="download-btn android-btn"
                   prepend-icon="mdi-google-play"
-                  href="https://play.google.com/store/apps/details?id=com.deflock"
+                  :href="appLinks.android"
                   target="_blank"
+                  :disabled="!appLinks.android"
                 >
-                  Get on Android
+                  <span v-if="appLinks.android">Get on Android</span>
+                  <span v-else>Android Coming Soon</span>
                 </v-btn>
               </div>
             </div>
@@ -198,10 +202,12 @@
               color="primary"
               class="cta-btn ios-cta"
               prepend-icon="mdi-apple"
-              href="https://apps.apple.com/app/deflock"
+              :href="appLinks.ios"
               target="_blank"
+              :disabled="!appLinks.ios"
             >
-              Download for iPhone
+              <span v-if="appLinks.ios">Download for iPhone</span>
+              <span v-else>iOS Coming Soon</span>
             </v-btn>
             <v-btn
               size="x-large"
@@ -209,10 +215,12 @@
               color="primary"
               class="cta-btn android-cta"
               prepend-icon="mdi-google-play"
-              href="https://play.google.com/store/apps/details?id=com.deflock"
+              :href="appLinks.android"
               target="_blank"
+              :disabled="!appLinks.android"
             >
-              Get on Google Play
+              <span v-if="appLinks.android">Get on Android</span>
+              <span v-else>Android Coming Soon</span>
             </v-btn>
           </div>
           <p class="cta-note">Free download • No ads • Privacy focused</p>
@@ -258,6 +266,11 @@ interface PrivacyPrinciple {
   id: number;
   title: string;
   description: string;
+}
+
+const appLinks = {
+  android: 'https://github.com/FoggedLens/deflock-app/releases',
+  ios: undefined,
 }
 
 // App features
@@ -397,12 +410,12 @@ const privacyPrinciples: PrivacyPrinciple[] = [
   {
     id: 2,
     title: 'Open Data Sources',
-    description: 'All map data comes directly from OpenStreetMap, a collaborative, open-source mapping project. ALPR locations are crowd-sourced and publicly available to promote transparency.'
+    description: 'All map data comes directly from OpenStreetMap, a collaborative, open-source mapping project. ALPR locations are crowd-sourced from contributors like you. Tiles are provided by OSM, Google, and Esri.'
   },
   {
     id: 3,
     title: 'Secure Authentication',
-    description: 'If you choose to authenticate with OpenStreetMap to submit camera locations, your credentials are handled via secure OAuth and never stored on our servers. We only receive permission to edit the map on your behalf.'
+    description: 'If you choose to authenticate with OpenStreetMap to submit camera locations, the app retrieves a token for your OSM account securely via OAuth, which is stored locally on your phone and only used for submissions.'
   },
   {
     id: 4,
