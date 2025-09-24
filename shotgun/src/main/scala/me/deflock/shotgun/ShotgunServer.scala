@@ -29,7 +29,6 @@ object ShotgunServer {
     implicit val executionContext: ExecutionContextExecutor = system.dispatcher
     val logging = Logging(system, getClass)
 
-    val client = new services.OverpassClient()
     val nominatim = new services.NominatimClient()
     val githubClient = new services.GithubClient()
 
@@ -56,16 +55,6 @@ object ShotgunServer {
 
     val apiRoutes = pathPrefix("api") {
       concat (
-        path("alpr") {
-          get {
-            parameters("minLat".as[Double], "minLng".as[Double], "maxLat".as[Double], "maxLng".as[Double]) { (minLat, minLng, maxLat, maxLng) =>
-              val bBox = services.BoundingBox(minLat, minLng, maxLat, maxLng)
-              onSuccess(client.getALPRs(bBox)) { json =>
-                complete(json)
-              }
-            }
-          }
-        },
         path("geocode") {
           get {
             parameters("query".as[String]) { query =>
