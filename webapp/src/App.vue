@@ -2,12 +2,15 @@
 import { RouterView, useRouter } from 'vue-router'
 import { computed, ref, watch, onMounted } from 'vue'
 import { useTheme } from 'vuetify';
+import DiscordWarningDialog from '@/components/DiscordWarningDialog.vue';
+import { useDiscordIntercept } from '@/composables/useDiscordIntercept';
 
 const theme = useTheme();
 const router = useRouter();
 const snackbar = ref({ show: false, text: '' });
 const isDark = computed(() => theme.name.value === 'dark');
 const isFullscreen = computed(() => router.currentRoute.value?.query.fullscreen === 'true');
+const { showDialog, discordUrl, interceptDiscordLinks } = useDiscordIntercept();
 
 function toggleTheme() {
   const newTheme = theme.global.name.value === 'dark' ? 'light' : 'dark';
@@ -22,6 +25,10 @@ function toggleTheme() {
   }
 }
 
+function handleDiscordProceed(url: string) {
+  window.open(url, '_blank');
+}
+
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
@@ -31,6 +38,7 @@ onMounted(() => {
     theme.global.name.value = prefersDark ? 'dark' : 'light';
     localStorage.setItem('theme', theme.global.name.value);
   }
+  interceptDiscordLinks();
 });
 
 const items = [
@@ -153,6 +161,12 @@ watch(() => theme.global.name.value, (newTheme) => {
         </v-btn>
       </template>
     </v-snackbar>
+
+    <DiscordWarningDialog
+      v-model="showDialog"
+      :discordUrl="discordUrl"
+      @proceed="handleDiscordProceed"
+    />
   </v-app>
 </template>
 
