@@ -66,8 +66,9 @@
         </div>
         
         <div class="timeline-container">
-          <!-- Timeline Item 1 -->
-          <div class="timeline-item">
+          
+          <!-- Timeline Items -->
+          <div v-for="city in citiesRejectingFlock" class="timeline-item">
             <div class="timeline-marker">
               <v-avatar size="48" color="success">
                 <v-icon color="white">mdi-check-bold</v-icon>
@@ -76,197 +77,21 @@
             <div class="timeline-content">
               <div class="timeline-card">
                 <div class="d-flex align-center justify-space-between mb-2">
-                  <h4 class="text-h6 font-weight-bold">Denver, CO</h4>
-                  <v-chip size="small" color="grey" variant="outlined">May 2025</v-chip>
+                  <h4 class="text-h6 font-weight-bold">{{ city.cityState }}</h4>
+                  <v-chip size="small" color="grey" variant="outlined">{{ city.monthYear }}</v-chip>
                 </div>
-                <p class="text-body-2 mb-2">
-                  City council <a href="https://denverite.com/2025/05/05/denver-rejects-flock-camera-license-plate-readers/" target="_blank">voted unanimously</a> to reject the $666,000 contract extension with Flock Safety after public pushback and concerns over privacy, civil liberties, and sharing data with federal agencies.
-                </p>
-                <v-chip size="small" color="success" variant="outlined">Contract Rejected</v-chip>
+                <p v-html="city.descriptionHtml" class="text-body-2 mb-2" />
+                <v-chip size="small" color="success" variant="outlined">{{ city.outcome }}</v-chip>
               </div>
             </div>
           </div>
 
-          <!-- Timeline Item 2 -->
-          <div class="timeline-item">
-            <div class="timeline-marker">
-              <v-avatar size="48" color="success">
-                <v-icon color="white">mdi-check-bold</v-icon>
-              </v-avatar>
-            </div>
-            <div class="timeline-content">
-              <div class="timeline-card">
-                <div class="d-flex align-center justify-space-between mb-2">
-                  <h4 class="text-h6 font-weight-bold">Austin, TX</h4>
-                  <v-chip size="small" color="grey" variant="outlined">June 2025</v-chip>
-                </div>
-                <p class="text-body-2 mb-2">
-                  City council <a target="_blank" href="https://www.eff.org/deeplinks/2025/06/victory-austin-organizers-cancel-citys-flock-alpr-contract">voted to block the renewal</a> of Austin's contract with Flock Safety after controversial uses for the system, violations of department policy, and contract language that went against council mandates on data retention.
-                </p>
-                <v-chip size="small" color="success" variant="outlined">Contract Rejected</v-chip>
-              </div>
-            </div>
-          </div>
-
-          <!-- Timeline Item 3 -->
-          <div class="timeline-item">
-            <div class="timeline-marker">
-              <v-avatar size="48" color="success">
-                <v-icon color="white">mdi-check-bold</v-icon>
-              </v-avatar>
-            </div>
-            <div class="timeline-content">
-              <div class="timeline-card">
-                <div class="d-flex align-center justify-space-between mb-2">
-                  <h4 class="text-h6 font-weight-bold">Oak Park, IL</h4>
-                  <v-chip size="small" color="grey" variant="outlined">August 2025</v-chip>
-                </div>
-                <p class="text-body-2 mb-2">
-                  City council voted to cancel its contract with Flock Safety following a state investigation of the system's data sharing practices, <a href="https://www.oakpark.com/2025/08/07/oak-park-terminates-flock-license-plate-reader-contract/" target="_blank">which enabled violations of state law</a>.
-                </p>
-                <v-chip size="small" color="success" variant="outlined">Contract Rejected</v-chip>
-              </div>
-            </div>
-          </div>
-
-          <!-- Timeline Item 4 -->
-          <div class="timeline-item timeline-item-last">
-            <div class="timeline-marker">
-              <v-avatar size="48" color="success">
-                <v-icon color="white">mdi-check-bold</v-icon>
-              </v-avatar>
-            </div>
-            <div class="timeline-content">
-              <div class="timeline-card">
-                <div class="d-flex align-center justify-space-between mb-2">
-                  <h4 class="text-h6 font-weight-bold">Sedona, AZ</h4>
-                  <v-chip size="small" color="grey" variant="outlined">September 2025</v-chip>
-                </div>
-                <p class="text-body-2 mb-2">
-                  City council voted unanimously to end their contract with Flock Safety after council members claimed they were <a href="https://www.knau.org/knau-and-arizona-news/2025-09-11/sedona-council-permanently-ends-license-plate-camera-program" target="_blank">misled and lied to</a> about the system's data sharing features.
-                </p>
-                <v-chip size="small" color="success" variant="outlined">Contract Rejected</v-chip>
-              </div>
-            </div>
-          </div>
         </div>
       </v-card>
     </v-col>
   </v-row>
 
-  <!-- Key Talking Points -->
-  <v-row class="mb-12">
-    <v-col cols="12" md="10" lg="8" class="mx-auto">
-      <v-card class="pa-6" elevation="3" rounded="lg">
-        <div class="d-flex align-center mb-6">
-          <v-icon size="40" color="primary" class="mr-3">mdi-message-text</v-icon>
-          <h3 class="text-h5 font-weight-bold">Effective Talking Points</h3>
-        </div>
-
-        <!-- TODO: revise these talking points, as some of them are bullshis -->
-
-        <v-expansion-panels flat variant="accordion" multiple>
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <div class="d-flex align-center">
-                <v-icon color="error" class="mr-3">mdi-eye-off</v-icon>
-                <strong>Privacy & Civil Liberties</strong>
-              </div>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <ul class="talking-points">
-                <li>ALPRs create a detailed log of every resident's movements without probable cause</li>
-                <li>Data is often shared with federal agencies and third-party companies</li>
-                <li>Creates a chilling effect on freedom of movement and association</li>
-                <li>Disproportionately impacts marginalized communities</li>
-                <li>Quote: "A society under surveillance is not a free society" - EFF</li>
-              </ul>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <div class="d-flex align-center">
-                <v-icon color="warning" class="mr-3">mdi-currency-usd</v-icon>
-                <strong>Financial Concerns</strong>
-              </div>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <ul class="talking-points">
-                <li>High ongoing costs: $2,000-$3,000 per camera annually</li>
-                <li>Additional costs for data storage, staff training, and legal compliance</li>
-                <li>Money could be better spent on proven crime prevention programs</li>
-                <li>Long-term vendor lock-in with limited alternatives</li>
-                <li>Potential liability costs from privacy lawsuits</li>
-              </ul>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <div class="d-flex align-center">
-                <v-icon color="info" class="mr-3">mdi-chart-line</v-icon>
-                <strong>Questionable Effectiveness</strong>
-              </div>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <ul class="talking-points">
-                <li>Limited peer-reviewed studies on crime reduction effectiveness</li>
-                <li>High false positive rates and accuracy issues</li>
-                <li>Criminals can easily avoid detection with license plate covers or stolen plates</li>
-                <li>Focus on reactive policing rather than addressing root causes of crime</li>
-                <li>May create false sense of security while misallocating resources</li>
-              </ul>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <div class="d-flex align-center">
-                <v-icon color="success" class="mr-3">mdi-scale-balance</v-icon>
-                <strong>Legal & Regulatory Issues</strong>
-              </div>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <ul class="talking-points">
-                <li>Lack of clear policies on data retention and sharing</li>
-                <li>Potential violation of state privacy laws</li>
-                <li>Inadequate oversight and transparency measures</li>
-                <li>Need for robust audit and accountability mechanisms</li>
-                <li>Public deserves input on surveillance policies affecting their privacy</li>
-              </ul>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-
-          <v-expansion-panel>
-            <v-expansion-panel-title>
-              <div class="d-flex align-center">
-                <v-icon color="purple" class="mr-3">mdi-handshake</v-icon>
-                <strong>Keeping It Non-Partisan</strong>
-              </div>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-              <v-alert type="warning" variant="tonal" class="mb-4">
-                <strong>Important:</strong> Privacy concerns about ALPRs unite people across political divides. Avoid framing this as a partisan issue.
-              </v-alert>
-              <ul class="talking-points">
-                <li>Privacy and government overreach concerns resonate with conservatives and libertarians</li>
-                <li>Civil rights and community surveillance concerns appeal to progressives</li>
-                <li>Avoid connecting ALPRs to immigration enforcement - opinions vary widely by region</li>
-                <li>Focus on local community values: fiscal responsibility, transparency, accountability</li>
-                <li>Research your community's political leanings and frame arguments accordingly</li>
-                <li>Emphasize bipartisan support for privacy rights and constitutional protections</li>
-                <li>Use language that brings people together rather than creates division</li>
-              </ul>
-              <v-alert type="info" variant="tonal" class="mt-4">
-                <strong>Strategy Tip:</strong> In conservative areas, emphasize government overreach and fiscal waste. In progressive areas, focus on civil rights and community impact. In mixed communities, stick to universal privacy and transparency themes.
-              </v-alert>
-            </v-expansion-panel-text>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </v-card>
-    </v-col>
-  </v-row>
+  <!-- CTA instead of talking points -->
 
   <!-- First-Time Speaker Guide -->
   <v-row class="mb-12">
@@ -294,7 +119,7 @@
                 <v-list-item-title>Prepare 2-3 minute statement (practice timing).</v-list-item-title>
               </v-list-item>
               <v-list-item prepend-icon="mdi-check">
-                <v-list-item-title>Bring a printed or digital copy of your statement.</v-list-item-title>
+                <v-list-item-title>Bring a copy of your statement.</v-list-item-title>
               </v-list-item>
             </v-list>
           </v-col>
@@ -308,7 +133,7 @@
                 <v-list-item-title>Arrive on time or early.</v-list-item-title>
               </v-list-item>
               <v-list-item prepend-icon="mdi-check">
-                <v-list-item-title>State your name and other info requested (often district or address).</v-list-item-title>
+                <v-list-item-title>State your name and connection to the city.</v-list-item-title>
               </v-list-item>
               <v-list-item prepend-icon="mdi-check">
                 <v-list-item-title>Speak clearly and maintain eye contact.</v-list-item-title>
@@ -410,6 +235,58 @@ import { useTheme } from 'vuetify';
 
 const theme = useTheme();
 const isDark = computed(() => theme.name.value === 'dark');
+
+interface CityRejection {
+  cityState: string;
+  monthYear: string;
+  descriptionHtml: string;
+  outcome: string;
+}
+
+const citiesRejectingFlock: CityRejection[] = [
+  {
+    cityState: "Denver, CO",
+    monthYear: "May 2025",
+    descriptionHtml: 'City council <a href="https://denverite.com/2025/05/05/denver-rejects-flock-camera-license-plate-readers/" target="_blank">voted unanimously</a> to reject the $666,000 contract extension with Flock Safety after public pushback and concerns over privacy, civil liberties, and sharing data with federal agencies.',
+    outcome: 'Contract Rejected'
+  },
+  {
+    cityState: "Austin, TX",
+    monthYear: "June 2025",
+    descriptionHtml: 'City council <a target="_blank" href="https://www.eff.org/deeplinks/2025/06/victory-austin-organizers-cancel-citys-flock-alpr-contract">voted to block the renewal</a> of Austin\'s contract with Flock Safety after controversial uses for the system, violations of department policy, and contract language that went against council mandates on data retention.',
+    outcome: 'Contract Rejected'
+  },
+  {
+    cityState: "Oak Park, IL",
+    monthYear: "August 2025",
+    descriptionHtml: 'City council voted to cancel its contract with Flock Safety following a state investigation of the system\'s data sharing practices, <a href="https://www.oakpark.com/2025/08/07/oak-park-terminates-flock-license-plate-reader-contract/" target="_blank">which enabled violations of state law</a>.',
+    outcome: 'Contract Canceled'
+  },
+  {
+    cityState: "Evanston, IL",
+    monthYear: "August 2025",
+    descriptionHtml: 'The City of Evanston ended its contract with Flock Safety and requested the deactivation of the cameras following an audit by the Secretary of State showing the company was <a target="_blank" href="https://evanstonroundtable.com/2025/08/26/evanston-shuts-down-license-plate-cameras-terminates-contract-with-flock-safety/">violating state law</a> by sharing Illinois data with federal agencies. Flock then <a target="_blank" href="https://evanstonroundtable.com/2025/09/24/flock-safety-reinstalls-evanston-cameras/">reinstalled the cameras against the city\'s wishes</a>, prompting a cease-and-desist by the city.',
+    outcome: 'Contract Canceled',
+  },
+  {
+    cityState: "Louisville, CO",
+    monthYear: "August 2025",
+    descriptionHtml: 'The City of Louisville deactivated its cameras after a community member found that the system <a target="_blank" href="https://www.cbsnews.com/colorado/news/license-plate-reading-cameras-colorado-regulation-misuse/">was severely misrepresented</a> in both its data sharing practices and its capabilities.',
+    outcome: 'Cameras Deactivated'
+  },
+  {
+    cityState: "Sedona, AZ",
+    monthYear: "September 2025",
+    descriptionHtml: 'City council voted unanimously to end their contract with Flock Safety after council members claimed they were <a href="https://www.knau.org/knau-and-arizona-news/2025-09-11/sedona-council-permanently-ends-license-plate-camera-program" target="_blank">misled and lied to</a> about the system\'s data sharing features.',
+    outcome: 'Contract Canceled'
+  }
+].sort((a, b) => {
+  const [aMonth, aYear] = a.monthYear.split(/\s/);
+  const [bMonth, bYear] = b.monthYear.split(/\s/);
+  const aDate = new Date(`${aMonth} 1, ${aYear}`);
+  const bDate = new Date(`${bMonth} 1, ${bYear}`);
+  return bDate.getTime() - aDate.getTime();
+}); //reverse chron order
 
 const videos = [
   {
