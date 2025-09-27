@@ -71,13 +71,13 @@ export const getSponsors = async () => {
 }
 
 export const getALPRCounts = async () => {
-  const s3Url = "https://deflock-clusters.s3.us-east-1.amazonaws.com/alpr-counts.json";
+  const s3Url = "https://cdn.deflock.me/alpr-counts.json";
   const response = await apiService.get(s3Url);
   return response.data;
 }
 
 export const getCities = async () => {
-  const s3Url = "https://deflock-clusters.s3.us-east-1.amazonaws.com/flock_cameras_null.json";
+  const s3Url = "https://cdn.deflock.me/flock_cameras_null.json";
   const response = await apiService.get(s3Url);
   return response.data;
 }

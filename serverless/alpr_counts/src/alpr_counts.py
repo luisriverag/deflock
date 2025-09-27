@@ -32,7 +32,7 @@ def lambda_handler(event, context):
   }
 
   s3 = boto3.client('s3')
-  bucket = 'deflock-clusters'
+  bucket = 'cdn.deflock.me'
   key = 'alpr-counts.json'
 
   s3.put_object(
