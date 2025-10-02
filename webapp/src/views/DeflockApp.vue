@@ -269,7 +269,7 @@ interface PrivacyPrinciple {
 }
 
 const appLinks = {
-  android: 'https://github.com/FoggedLens/deflock-app/releases',
+  android: 'https://play.google.com/store/apps/details?id=me.deflock.deflockapp',
   ios: undefined,
 }
 
