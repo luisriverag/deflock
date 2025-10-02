@@ -5,7 +5,7 @@ import boto3
 def fetch_alpr_surveillance_nodes(usOnly=False):
   overpass_url = "http://overpass-api.de/api/interpreter"
   overpass_query = f"""
-  [out:json];
+  [out:json][timeout:180];
   {'area["ISO3166-1"="US"]->.searchArea;' if usOnly else ''}
   node["man_made"="surveillance"]["surveillance:type"="ALPR"]{f'(area.searchArea)' if usOnly else ''};
   out count;
@@ -18,13 +18,19 @@ def fetch_alpr_surveillance_nodes(usOnly=False):
     try:
       return response_json['elements'][0]['tags']['nodes']
     except (IndexError, KeyError) as e:
-      return {"error": "Could not find 'elements[0].tags.nodes' in the response."}
+      raise RuntimeError("Could not find 'elements[0].tags.nodes' in the response.")
   else:
-    return {"error": f"Failed to fetch data from Overpass API. Status code: {response.status_code}"}
+    raise RuntimeError(f"Failed to fetch data from Overpass API. Status code: {response.status_code}")
 
 def lambda_handler(event, context):
   # us_alprs = fetch_alpr_surveillance_nodes('(area["ISO3166-1"="US"])')
-  worldwide_alprs = fetch_alpr_surveillance_nodes()
+  try:
+    worldwide_alprs = fetch_alpr_surveillance_nodes()
+  except Exception as e:
+    return {
+      'statusCode': 500,
+      'body': f"Failed to fetch ALPR counts: {str(e)}",
+    }
 
   all_alprs = {
     # 'us': us_alprs,
