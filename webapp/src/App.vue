@@ -54,7 +54,7 @@ const contributeItems = [
 ]
 
 const metaItems = [
-  { title: 'Discord', customIcon: '/icon-discord.svg', customIconDark: '/icon-discord-white.svg', href: 'https://discord.gg/aV7v4R3sKT'},
+  { title: 'Discord', customIcon: '/icon-discord.svg', customIconDark: '/icon-discord-white.svg', customIconGrey: '/icon-discord-grey.svg', href: 'https://discord.gg/aV7v4R3sKT'},
   { title: 'Contact', icon: 'mdi-email-outline', to: '/contact' },
   { title: 'GitHub', icon: 'mdi-github', href: 'https://github.com/frillweeman/deflock'},
   { title: 'Donate', icon: 'mdi-heart', to: '/donate'},
@@ -80,8 +80,14 @@ watch(() => theme.global.name.value, (newTheme) => {
         flat
         prominent
       >
-        <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+        <!-- Mobile hamburger menu -->
+        <v-app-bar-nav-icon 
+          variant="text" 
+          @click.stop="drawer = !drawer"
+          class="d-md-none"
+        ></v-app-bar-nav-icon>
 
+        <!-- Logo -->
         <v-toolbar-title style="flex: unset;">
           <div style="display: flex; align-items: center; cursor: pointer;" @click="router.push('/')">
             <v-img height="36" width="36" src="/favicons/apple-icon-144x144.png" />
@@ -89,16 +95,103 @@ watch(() => theme.global.name.value, (newTheme) => {
           </div>
         </v-toolbar-title>
 
-        <v-spacer></v-spacer>
+        <!-- Desktop horizontal navigation -->
+        <div class="d-none d-md-flex ml-8 flex-grow-1">
+          <!-- Main navigation items -->
+          <div class="d-flex align-center">
+            <v-btn 
+              v-for="item in items.slice(1)" 
+              :key="item.title"
+              :to="item.to"
+              variant="text"
+              class="mx-1"
+              :prepend-icon="item.icon"
+            >
+              {{ item.title }}
+            </v-btn>
+          </div>
+
+          <v-spacer></v-spacer>
+
+          <!-- Contribute section -->
+          <div class="d-flex align-center">
+            <v-menu offset-y>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  variant="text"
+                  v-bind="props"
+                  append-icon="mdi-chevron-down"
+                  class="mx-1"
+                >
+                  Contribute
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="item in contributeItems"
+                  :key="item.title"
+                  :to="item.to"
+                  link
+                >
+                  <template v-slot:prepend>
+                    <v-icon>{{ item.icon }}</v-icon>
+                  </template>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+
+            <!-- Get Involved section -->
+            <v-menu offset-y>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  variant="text"
+                  v-bind="props"
+                  append-icon="mdi-chevron-down"
+                  class="mx-1"
+                >
+                  Get Involved
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="item in metaItems"
+                  :key="item.title"
+                  :to="item.to"
+                  :href="item.href"
+                  :target="item.href ? '_blank' : undefined"
+                  link
+                >
+                  <template v-slot:prepend>
+                    <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+                    <v-img 
+                      v-else-if="item.customIcon"
+                      class="mr-8"
+                      contain 
+                      width="24" 
+                      height="24" 
+                      :src="isDark ? item.customIconDark : item.customIconGrey" 
+                    />
+                  </template>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
+        </div>
+
+        <v-spacer class="d-md-none" />
 
         <v-btn icon>
           <v-icon @click="toggleTheme">mdi-theme-light-dark</v-icon>
         </v-btn>
       </v-app-bar>
 
+      <!-- Mobile navigation drawer -->
       <v-navigation-drawer
         v-model="drawer"
         temporary
+        class="d-md-none"
       >
         <v-list nav>
           <v-list-item
