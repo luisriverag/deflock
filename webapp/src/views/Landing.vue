@@ -106,10 +106,11 @@
 
 <style>
 .hero-section {
-  background: url('/flock-camera.jpeg') no-repeat center center;
+  background: url('/hero.jpg') no-repeat center center;
   background-size: cover;
   color: white;
   padding: 60px 0 50px 0 !important;
+  background-position: right center;
   position: relative;
 }
 
@@ -120,7 +121,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.45);
   z-index: 1;
 }
 

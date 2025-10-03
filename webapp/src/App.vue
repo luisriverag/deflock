@@ -45,13 +45,10 @@ const items = [
   { title: 'Home', icon: 'mdi-home', to: '/' },
   { title: 'Map', icon: 'mdi-map', to: '/map' },
   { title: 'Learn', icon: 'mdi-school', to: '/what-is-an-alpr' },
-  // { title: 'Known Operators', icon: 'mdi-police-badge', to: '/operators' },
-  // { title: 'About', icon: 'mdi-information', to: '/about' },
-  // { title: 'Feature Roadmap', icon: 'mdi-road-variant', to: '/roadmap' },
 ]
 
 const contributeItems = [
-  { title: 'Submit Cameras', icon: 'mdi-map-marker-plus', to: '/report/id' },
+  { title: 'Submit Cameras', icon: 'mdi-map-marker-plus', to: '/report' },
   { title: 'Public Records', icon: 'mdi-file-document', to: '/foia' },
   { title: 'City Council', icon: 'mdi-account-voice', to: '/council' },
 ]
@@ -85,8 +82,11 @@ watch(() => theme.global.name.value, (newTheme) => {
       >
         <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-        <v-toolbar-title>
-          <v-img style="cursor: pointer" height="36" width="130" src="/deflock-logo.svg" @click="router.push('/')" />
+        <v-toolbar-title style="flex: unset;">
+          <div style="display: flex; align-items: center; cursor: pointer;" @click="router.push('/')">
+            <v-img height="36" width="36" src="/favicons/apple-icon-144x144.png" />
+            <v-img style="margin-left: 8px;" height="36" width="130" src="/deflock-logo.svg" />
+          </div>
         </v-toolbar-title>
 
         <v-spacer></v-spacer>

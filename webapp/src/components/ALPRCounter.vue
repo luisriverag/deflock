@@ -1,7 +1,7 @@
 <template>
   <div class="counter">
     <span :class="{ mobile: isMobile }" ref="counterEl" class="font-weight-bold">0</span>
-    <span class="caption">&nbsp;ALPRs Reported Worldwide</span>
+    <span class="caption">&nbsp;ALPRs Mapped Worldwide</span>
     <div :class="{ 'fade-in': showFinalAnimation }" class="subheading fade-text">and rapidly growing!</div>
   </div>
 </template>

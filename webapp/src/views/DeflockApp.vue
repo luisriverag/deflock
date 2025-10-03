@@ -45,7 +45,7 @@
           </v-col>
           <v-col cols="12" md="6" class="hero-image">
             <div class="phone-mockup">
-              <img src="/app-screenshots/3_tagnew-left.webp" alt="DeFlock App Screenshot" class="phone-image" />
+              <img src="/app-screenshots/app_showcase.webp" alt="DeFlock App Screenshot" class="phone-image" />
             </div>
           </v-col>
         </v-row>
@@ -110,7 +110,7 @@
               </div>
             </v-col>
           </v-row>
-          <div class="screenshots-toggle" style="text-align:center; margin-top:32px;">
+          <!-- <div class="screenshots-toggle" style="text-align:center; margin-top:32px;">
             <v-btn
               variant="tonal"
               color="primary"
@@ -120,7 +120,7 @@
             >
               {{ showAllScreenshots ? 'Show Less' : 'Show More Screenshots' }}
             </v-btn>
-          </div>
+          </div> -->
         </div>
       </v-container>
     </section>
@@ -167,22 +167,6 @@
                 </v-card-text>
               </v-card>
             </div>
-            
-            <v-alert
-              type="info"
-              variant="tonal"
-              class="privacy-summary-alert"
-              prominent
-            >
-              <template v-slot:prepend>
-                <v-icon icon="mdi-shield-check" />
-              </template>
-              <div class="text-body-1">
-                <strong>In summary:</strong> DeFlock is designed to protect your privacy while empowering you 
-                to understand surveillance in your community. We collect no data, track no behavior, 
-                and store no personal information. Your privacy is not a product to be sold.
-              </div>
-            </v-alert>
           </div>
         </div>
       </v-container>
@@ -303,75 +287,38 @@ const screenshots: Screenshot[] = [
   {
     id: 1,
     title: 'Interactive Map',
-    description: 'Explore ALPR locations in your area',
+    description: 'Explore ALPR cameras near you',
     image: '/1_home.webp'
   },
   {
     id: 2,
-    title: 'Camera Details',
-    description: 'Get detailed information about each camera',
-    image: '/2_layers.webp'
+    title: 'Report New Cameras',
+    description: 'Add new ALPR locations easily',
+    image: '/13_add_and_place.webp'
   },
   {
     id: 3,
-    title: 'Report Interface',
-    description: 'Easily report new cameras you discover',
-    image: '/3_tagnew.webp'
+    title: 'Works Offline',
+    description: 'Log cameras without internet',
+    image: '/26_select_zoom.webp'
   },
-  {
-    id: 4,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/4_camtags.webp'
-  },
-  {
-    id: 5,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/5_edit.webp'
-  },
-  {
-    id: 6,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/6_edited.webp'
-  },
-  {
-    id: 7,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/7_download.webp'
-  },
-  {
-    id: 8,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/8_settings1.webp'
-  },
-  {
-    id: 9,
-    title: 'Privacy Center',
-    description: 'Access privacy tools and resources',
-    image: '/9_settings2.webp'
-  }
-  
 ];
 
 // Statistics
 const statistics: Statistic[] = [
   {
     id: 1,
-    number: '35K+',
-    label: 'ALPRs Mapped'
+    number: '40K+',
+    label: 'Cameras Mapped'
   },
   {
     id: 2,
     number: '500+',
-    label: 'Cities Covered'
+    label: 'Communities Covered'
   },
   {
     id: 3,
-    number: '25K+',
+    number: '1K+',
     label: 'Contributors'
   },
 ];
@@ -743,7 +690,7 @@ const visibleScreenshots = computed(() =>
 
 /* Privacy Policy Section */
 .privacy-policy-section {
-  padding: 100px 0;
+  padding-top: 100px;
 }
 
 .privacy-policy-content {

@@ -34,9 +34,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
       meta: {
         title: 'About | DeFlock'
@@ -60,7 +57,7 @@ const router = createRouter({
           name: 'report',
           component: () => import('../views/ReportChoose.vue'),
           meta: {
-            title: 'Report an ALPR | DeFlock'
+            title: 'Submit Cameras | DeFlock'
           },
         },
         {
@@ -71,23 +68,7 @@ const router = createRouter({
             title: 'Submit Cameras | DeFlock'
           }
         },
-        {
-          path: '/report/every-door',
-          name: 'reportEveryDoor',
-          component: () => import('../views/ReportEveryDoor.vue'),
-          meta: {
-            title: 'Report using Every Door | DeFlock'
-          }
-        },
       ]
-    },
-    {
-      path: '/operators',
-      name: 'operators',
-      component: () => import('../views/OperatorsView.vue'),
-      meta: {
-        title: 'Operators | DeFlock'
-      }
     },
     {
       path: '/council',
@@ -111,14 +92,6 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue'),
       meta: {
         title: 'Contact | DeFlock'
-      }
-    },
-    {
-      path: '/roadmap',
-      name: 'roadmap',
-      component: () => import('../views/RoadmapView.vue'),
-      meta: {
-        title: 'Roadmap | DeFlock'
       }
     },
     {
