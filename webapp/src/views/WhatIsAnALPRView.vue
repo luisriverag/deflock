@@ -38,6 +38,10 @@
 
     <h2 class="mb-8">Frequently Asked Questions</h2>
     <FAQ />
+    
+    <v-divider class="my-12" />
+    
+    <SimilarProjects />
   </v-container>
   <Footer />
 </template>
@@ -47,6 +51,7 @@ import Hero from '@/components/layout/Hero.vue';
 import Dangers from '@/components/Dangers.vue';
 import FAQ from '@/components/FAQ.vue';
 import Footer from '@/components/layout/Footer.vue';
+import SimilarProjects from '@/components/SimilarProjects.vue';
 </script>
 
 <style scoped>
