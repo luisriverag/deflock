@@ -33,42 +33,6 @@
           class="mx-auto h-100 d-flex flex-column"
           elevation="4"
           hover
-          to="/app"
-        > 
-          <v-card-item class="bg-green-darken-3">
-            <v-card-title class="text-h5 font-weight-bold text-white">
-              DeFlock App
-            </v-card-title>
-            <v-card-subtitle class="pt-2">
-              for iOS and Android
-            </v-card-subtitle>
-          </v-card-item>
-        
-          <v-img cover :aspect-ratio="1.5" class="mx-auto mt-5" src="/app-screenshots/df-app.webp" style="width: 90%; border-radius: 8px;" />
-        
-          <v-card-text class="text-body-1">
-            <p class="mb-4 sans-serif">The <b>DeFlock App</b> provides a simple mobile interface that's easy to use while walking around.</p>
-          </v-card-text>
-        
-          <v-card-actions class="pa-4">
-            <v-btn
-              block
-              color="green-darken-2"
-              variant="elevated"
-              size="large"
-            >
-              Download App
-              <v-icon icon="mdi-arrow-right" end></v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" md="5" class="pa-4">
-        <v-card
-          class="mx-auto h-100 d-flex flex-column"
-          elevation="4"
-          hover
           to="/report/id"
         >
           <v-card-item class="bg-blue-darken-3">
@@ -100,6 +64,57 @@
           </v-card-actions>
         </v-card>
       </v-col>
+
+      <v-col cols="12" md="5" class="pa-4">
+        <div class="app-card-container">
+          <v-card
+            class="mx-auto h-100 d-flex flex-column app-card-disabled"
+            elevation="4"
+            :class="{ 'card-disabled': true }"
+          > 
+            <v-card-item class="bg-green-darken-3">
+              <v-card-title class="text-h5 font-weight-bold text-white">
+                DeFlock App
+              </v-card-title>
+              <v-card-subtitle class="pt-2">
+                for iOS and Android
+              </v-card-subtitle>
+            </v-card-item>
+          
+            <v-img cover :aspect-ratio="1.5" class="mx-auto mt-5" src="/app-screenshots/df-app.webp" style="width: 90%; border-radius: 8px;" />
+          
+            <v-card-text class="text-body-1">
+              <p class="mb-4 sans-serif">The <b>DeFlock App</b> provides a simple mobile interface that's easy to use while walking around.</p>
+            </v-card-text>
+          
+            <v-card-actions class="pa-4">
+              <v-btn
+                block
+                color="green-darken-2"
+                variant="elevated"
+                size="large"
+                disabled
+              >
+                Download App
+                <v-icon icon="mdi-arrow-right" end></v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+          
+          <!-- Coming Soon Banner -->
+          <div class="coming-soon-banner">
+            <v-chip
+              color="warning"
+              variant="elevated"
+              size="large"
+              prepend-icon="mdi-clock-outline"
+              class="coming-soon-chip"
+            >
+              Coming Soon
+            </v-chip>
+          </div>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -116,5 +131,34 @@ import ALPRVerificationDialog from '@/components/ALPRVerificationDialog.vue';
 .verification-alert .v-alert-title {
   font-weight: 600;
   font-size: 1.1rem;
+}
+
+/* App card disabled styling */
+.app-card-container {
+  position: relative;
+}
+
+.card-disabled {
+  opacity: 0.7;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.coming-soon-banner {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+.coming-soon-chip {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+/* Ensure the banner shows above card content */
+.app-card-container .v-card {
+  position: relative;
+  z-index: 1;
 }
 </style>
