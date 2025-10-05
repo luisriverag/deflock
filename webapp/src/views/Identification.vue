@@ -55,7 +55,7 @@
               <v-img v-if="vendor.logoUrl" contain :src="vendor.logoUrl" :alt="`${vendor.vendor} Logo`" style="height: 48px;" />
               <div
                 style="height: 48px; display: flex; align-items: center; justify-content: center;"
-                class="font-weight-bold"
+                class="font-weight-bold text-black"
                 v-else
               >
                 {{ vendor.vendor }}
