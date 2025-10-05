@@ -132,6 +132,14 @@ const router = createRouter({
       component: () => import('../views/FOIA.vue'),
     },
     {
+      path: '/identify',
+      name: 'identify',
+      component: () => import('../views/Identification.vue'),
+      meta: {
+        title: 'Identify ALPRs | DeFlock'
+      }
+    },
+    {
       path: '/press',
       name: 'press',
       component: () => import('../views/Press.vue'),

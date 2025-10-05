@@ -1,16 +1,31 @@
 <template>
-  <v-container fluid>
-    <v-row justify="center" class="hero-section-whatis text-center mb-4">
-    </v-row>
-  </v-container>
+  <Hero
+    image-url="/flock-camera.jpeg"
+    :opacity="0"
+  />
   
-  <v-container class="info-section">
+  <v-container class="info-section mb-16">
     <h1 class="mt-0">What are ALPRs?</h1>
     <p>
       Automated License Plate Readers (ALPRs) are AI-powered cameras that capture and analyze images of all passing vehicles, storing details like your car's location, date, and time. They also capture your car's make, model, color, and identifying features such as dents, roof racks, and bumper stickers, <a href="https://www.flocksafety.com/products/license-plate-readers#:~:text=No%20Plate%3F%20No%20Problem" target="_blank">often turning these into searchable data points</a>. These cameras collect data on millions of vehicles—regardless of whether the driver is suspected of a crime. While these systems can be useful for tracking stolen cars or wanted individuals, they are mostly used to track the movements of innocent people.
     </p>
 
     <p>For a detailed explanation of how ALPRs are a threat to privacy, see this <a href="https://www.aclu.org/issues/privacy-technology/you-are-being-tracked" target="_blank">ACLU article</a> as well as this <a href="https://sls.eff.org/technologies/automated-license-plate-readers-alprs" target="_blank">EFF article</a> on ALPRs.</p>
+
+    <v-divider class="my-12" />
+
+    <h2 class="mb-8">
+      <v-icon class="mr-2" color="primary">mdi-camera-outline</v-icon>
+      What do they look like?
+    </h2>
+    <div class="mb-16 text-center">
+      <v-btn size="large" color="primary" to="/identify">
+        <v-icon left class="mr-2">mdi-image-search</v-icon>
+        View ALPR Images
+      </v-btn>
+    </div>
+
+    <v-divider class="my-12" />
 
     <h2>Why Should You Be Concerned</h2>
     <p class="mb-8 text-center">
@@ -19,73 +34,19 @@
 
     <Dangers />
 
+    <v-divider class="my-12" />
 
-    <h2>Frequently Asked Questions</h2>
+    <h2 class="mb-8">Frequently Asked Questions</h2>
     <FAQ />
-
-    <h2 id="photos">What they Look Like</h2>
-
-    <v-row v-for="vendor in vendors" :key="vendor.vendor" class="mb-4">
-      <v-col cols="12">
-        <h3 class="text-center">{{ vendor.vendor }}</h3>
-      </v-col>
-      <v-col v-for="url in vendor.imageUrls" cols="12" sm="6" md="4">
-        <v-img @click="openImageInNewTab(url)" style="cursor: pointer;" cover :aspect-ratio="3/2" :src="url" />
-      </v-col>
-    </v-row>
   </v-container>
   <Footer />
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
-import { useDisplay } from 'vuetify';
+import Hero from '@/components/layout/Hero.vue';
 import Dangers from '@/components/Dangers.vue';
 import FAQ from '@/components/FAQ.vue';
 import Footer from '@/components/layout/Footer.vue';
-const { xs: isMobile } = useDisplay();
-
-const showFullScreenImage = ref(false);
-const fullScreenImage: Ref<any|undefined> = ref(undefined);
-
-function openImageInNewTab(url: string, newTab: boolean = true) {
-  window.open(url, newTab ? '_blank' : '_self');
-}
-
-const vendors = [
-  {
-    vendor: 'Flock',
-    count: 4,
-    urlScheme: '/alprs/flock-{index}.jpg',
-  },
-  {
-    vendor: 'Motorola/Vigilant',
-    count: 4,
-    urlScheme: '/alprs/motorola-{index}.jpg',
-  },
-  {
-    vendor: 'Genetec',
-    count: 3,
-    urlScheme: '/alprs/genetec-{index}.webp',
-  },
-  {
-    vendor: 'Leonardo/ELSAG',
-    count: 4,
-    urlScheme: '/alprs/elsag-{index}.jpg',
-  },
-  {
-    vendor: 'Neology',
-    count: 2,
-    urlScheme: '/alprs/neology-{index}.jpg',
-  },
-].reduce((acc: any, vendor: any) => {
-  const imageUrls = Array.from({ length: vendor.count }, (_, index) => 
-    vendor.urlScheme.replace('{index}', String(index + 1)),
-  );
-
-  acc.push({ vendor: vendor.vendor, imageUrls });
-  return acc;
-}, []);
 </script>
 
 <style scoped>
@@ -128,13 +89,5 @@ h1, h2 {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
-}
-
-.hero-section-whatis {
-  background: url('/flock-camera.jpeg') no-repeat right center;
-  background-size: cover;
-  color: white;
-  position: relative;
-  height: 400px;
 }
 </style>

@@ -1,9 +1,10 @@
 <template>
-  <v-container fluid>
+  <v-container fluid style="padding: 0;">
     <v-row
       justify="center"
       class="hero text-center mb-4"
-      :style="`background: url('${imageUrl}') no-repeat center center / cover; --hero-opacity: ${opacity};`"
+      :class="{ 'hero-image': imageUrl, 'hero-gradient': gradient }"
+      :style="heroStyle"
     >
       <v-col cols="12" md="8">
         <h1 class="mb-4">{{ title }}</h1>
@@ -32,6 +33,7 @@ const props = defineProps({
   title: String,
   description: String,
   imageUrl: String,
+  gradient: String,
   buttonText: String,
   buttonTo: String,
   buttonHref: String,
@@ -44,6 +46,15 @@ const props = defineProps({
 const target = computed(() =>
   props.buttonHref && !props.buttonHref.startsWith('#') ? '_blank' : '_self'
 );
+
+const heroStyle = computed(() => {
+  if (props.gradient) {
+    return `background: ${props.gradient};`;
+  } else if (props.imageUrl) {
+    return `background: url('${props.imageUrl}') no-repeat center center / cover; --hero-opacity: ${props.opacity};`;
+  }
+  return '';
+});
 </script>
 
 <style scoped>
@@ -51,9 +62,11 @@ const target = computed(() =>
   color: white;
   padding: 100px 0 !important;
   position: relative;
+  min-height: 350px;
 }
 
-.hero::before {
+/* Overlay for image backgrounds only */
+.hero-image::before {
   content: '';
   position: absolute;
   top: 0;

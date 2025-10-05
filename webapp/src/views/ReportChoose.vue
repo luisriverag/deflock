@@ -1,14 +1,29 @@
 <template>
   <v-container class="my-16">
-    <v-row justify="center" class="mb-8">
+    <!-- ALPR Verification Dialog -->
+    <ALPRVerificationDialog />
+    
+    <v-row justify="center" class="mb-4">
       <v-col cols="12" md="8">
         <h2 class="text-center text-h4 font-weight-bold">Choose Your Reporting Method</h2>
         <p class="text-center text-body-1 mt-4">
-          We use OpenStreetMap to source our data. Choose a method below to add to our map.
+          Choose a method below to add to our map.
         </p>
-        <p class="sans-serif text-center mt-2">
-          <a style="font-size: 0.85em" target="_blank" href="https://deflock.hashnode.dev/why-we-use-openstreetmap">Why do we use OSM?</a>
-        </p>
+      </v-col>
+    </v-row>
+
+    <!-- ALPR Identification Warning -->
+    <v-row justify="center" class="mb-8">
+      <v-col cols="12" class="text-center">
+        <v-btn
+          color="blue"
+          variant="tonal"
+          to="/identify"
+          prepend-icon="mdi-image-search"
+          size="large"
+        >
+          View ALPR Gallery
+        </v-btn>
       </v-col>
     </v-row>
 
@@ -88,3 +103,18 @@
     </v-row>
   </v-container>
 </template>
+
+<script setup lang="ts">
+import ALPRVerificationDialog from '@/components/ALPRVerificationDialog.vue';
+</script>
+
+<style scoped>
+.verification-alert {
+  border-left-width: 6px !important;
+}
+
+.verification-alert .v-alert-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+</style>
