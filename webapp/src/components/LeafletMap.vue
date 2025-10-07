@@ -8,8 +8,37 @@
     </div>
 
     <div class="bottomright">
+      <!-- Clustering Toggle Button -->
+      <v-fab
+        v-if="!isFullScreen"
+        icon
+        variant="elevated"
+        size="small"
+        style="position: relative; left: 3px;"
+        class="clustering-toggle-btn mb-2"
+        @click="clusteringEnabled = !clusteringEnabled"
+      >
+        <v-icon>{{ shouldCluster ? 'mdi-scatter-plot' : 'mdi-chart-bubble' }}</v-icon>
+        <v-tooltip activator="parent" location="left">
+          {{ clusteringEnabled ? 'Disable Clustering' : 'Enable Clustering' }}
+        </v-tooltip>
+      </v-fab>
+      
       <slot name="bottomright"></slot>
     </div>
+    
+    <!-- Status Bar for Forced Clustering -->
+    <v-slide-y-transition>
+      <div 
+        v-if="showAutoDisabledStatus" 
+        class="clustering-status-bar"
+      >
+        <v-icon size="small" class="mr-2">mdi-information</v-icon>
+        <span class="text-caption">
+          Clustering forced ON at this zoom level for performance.
+        </span>
+      </div>
+    </v-slide-y-transition>
   </div>
 </template>
 
@@ -28,11 +57,31 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import { useTheme } from 'vuetify';
 
 const MARKER_COLOR = 'rgb(63,84,243)';
+const CLUSTER_DISABLE_ZOOM = 16; // Clustering disabled at zoom 16 and above
 
 // Internal State Management
 const markerMap = new Map<string, Marker | CircleMarker>();
 const isInternalUpdate = ref(false);
 const isFullScreen = computed(() => useRoute().query.fullscreen === 'true');
+
+// Clustering Control
+const clusteringEnabled = ref(true);
+const currentZoom = ref(0);
+
+// Computed property to determine if clustering should be active based on zoom and user preference
+const shouldCluster = computed(() => {
+  // Force clustering ON when zoomed out (below zoom 12) regardless of user preference
+  if (currentZoom.value < 12) {
+    return true;
+  }
+  // At higher zoom levels, respect user preference
+  return clusteringEnabled.value && currentZoom.value < CLUSTER_DISABLE_ZOOM;
+});
+
+// Show status when clustering is disabled by user but forced ON due to zoom
+const showAutoDisabledStatus = computed(() => {
+  return !clusteringEnabled.value && currentZoom.value < 12;
+});
 
 const props = defineProps({
   center: {
@@ -183,7 +232,7 @@ function initializeMap() {
 
   clusterLayer = L.markerClusterGroup({
     chunkedLoading: true,
-    disableClusteringAtZoom: 16,
+    disableClusteringAtZoom: shouldCluster.value ? CLUSTER_DISABLE_ZOOM : 1,
     removeOutsideVisibleBounds: true,
     maxClusterRadius: 60,
     spiderfyOnEveryZoom: false,
@@ -192,6 +241,9 @@ function initializeMap() {
 
   circlesLayer = L.featureGroup();
   currentLocationLayer = L.featureGroup();
+
+  // Initialize current zoom
+  currentZoom.value = props.zoom;
 
   map.addLayer(clusterLayer);
   registerMapEvents();
@@ -244,9 +296,48 @@ function updateCurrentLocation(): void {
   }
 }
 
+function updateClusteringBehavior(): void {
+  if (!clusterLayer || !map) return;
+  
+  // Use shouldCluster computed value which handles both zoom and user preference
+  const newDisableZoom = shouldCluster.value ? CLUSTER_DISABLE_ZOOM : 1;
+  
+  // Remove the cluster layer, update its options, and re-add it
+  if (map.hasLayer(clusterLayer)) {
+    map.removeLayer(clusterLayer);
+  }
+  
+  // Create new cluster layer with updated settings
+  const newClusterLayer = L.markerClusterGroup({
+    chunkedLoading: true,
+    disableClusteringAtZoom: newDisableZoom,
+    removeOutsideVisibleBounds: true,
+    maxClusterRadius: 60,
+    spiderfyOnEveryZoom: false,
+    spiderfyOnMaxZoom: false,
+  });
+  
+  // Transfer all markers to the new cluster layer
+  newClusterLayer.addLayer(circlesLayer);
+  
+  // Replace the old cluster layer
+  clusterLayer = newClusterLayer;
+  map.addLayer(clusterLayer);
+}
+
 // Lifecycle Hooks
 onMounted(() => {
   initializeMap();
+
+  // Watch for clustering toggle
+  watch(clusteringEnabled, () => {
+    updateClusteringBehavior();
+  });
+  
+  // Watch for zoom-based clustering changes
+  watch(shouldCluster, () => {
+    updateClusteringBehavior();
+  });
 
   // Watch for prop changes
   watch(() => props.center, (newCenter: any) => {
@@ -262,6 +353,7 @@ onMounted(() => {
   watch(() => props.zoom, (newZoom: number) => {
     if (!isInternalUpdate.value) {
       isInternalUpdate.value = true;
+      currentZoom.value = newZoom;
       map.setZoom(newZoom);
       setTimeout(() => {
         isInternalUpdate.value = false;
@@ -288,6 +380,12 @@ function registerMapEvents() {
       emit('update:center', map.getCenter());
       emit('update:zoom', map.getZoom());
       emit('update:bounds', map.getBounds());
+    }
+  });
+  
+  map.on('zoomend', () => {
+    if (!isInternalUpdate.value) {
+      currentZoom.value = map.getZoom();
     }
   });
 }
@@ -318,6 +416,40 @@ function registerMapEvents() {
   bottom: 50px; /* hack */
   right: 60px; /* hack */
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.clustering-toggle-btn {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  bottom: 50px;
+  right: 10px;
+}
+
+.clustering-status-bar {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(33, 33, 33, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  min-width: 280px;
+  max-width: 90vw;
+  text-align: center;
 }
 </style>
 
