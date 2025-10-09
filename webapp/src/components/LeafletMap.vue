@@ -7,36 +7,55 @@
       <slot name="topleft"></slot>
     </div>
 
-    <div class="bottomright">
-      <!-- Clustering Toggle Button -->
-      <v-fab
+    <div class="topright">
+      <!-- Clustering Toggle Switch -->
+      <v-card
         v-if="!isFullScreen"
-        icon
         variant="elevated"
-        size="small"
-        style="position: relative; left: 3px;"
-        class="clustering-toggle-btn mb-2"
-        @click="clusteringEnabled = !clusteringEnabled"
+        :class="{ 'highlighted': shouldGlowButton }"
       >
-        <v-icon>{{ shouldCluster ? 'mdi-scatter-plot' : 'mdi-chart-bubble' }}</v-icon>
-        <v-tooltip activator="parent" location="left">
-          {{ clusteringEnabled ? 'Disable Clustering' : 'Enable Clustering' }}
-        </v-tooltip>
-      </v-fab>
-      
+        <v-card-text class="pa-3">
+          <div class="d-flex align-center">
+            <v-icon size="small" class="mr-2">mdi-chart-bubble</v-icon>
+            <span class="text-caption mr-2">Group</span>
+            <v-switch
+              v-model="clusteringEnabled"
+              :disabled="currentZoom < 12"
+              hide-details
+              density="compact"
+              color="primary"
+              @update:model-value="onToggleChange"
+            />
+          </div>
+        </v-card-text>
+      </v-card>
+    </div>
+
+    <div class="bottomright">
       <slot name="bottomright"></slot>
     </div>
     
-    <!-- Status Bar for Forced Clustering -->
+    <!-- Status Bar for Forced Clustering and Hints -->
     <v-slide-y-transition>
       <div 
-        v-if="showAutoDisabledStatus" 
+        v-if="showStatusBar" 
         class="clustering-status-bar"
       >
-        <v-icon size="small" class="mr-2">mdi-information</v-icon>
+        <v-icon size="small" class="mr-2">{{ statusBarIcon }}</v-icon>
         <span class="text-caption">
-          Clustering forced ON at this zoom level for performance.
+          {{ statusBarMessage }}
         </span>
+        <v-btn 
+          v-if="statusBarCanDismiss"
+          size="x-small" 
+          icon
+          variant="text" 
+          color="white"
+          class="ml-2"
+          @click="dismissStatusBar"
+        >
+          <v-icon size="small">mdi-close</v-icon>
+        </v-btn>
       </div>
     </v-slide-y-transition>
   </div>
@@ -62,11 +81,16 @@ const CLUSTER_DISABLE_ZOOM = 16; // Clustering disabled at zoom 16 and above
 // Internal State Management
 const markerMap = new Map<string, Marker | CircleMarker>();
 const isInternalUpdate = ref(false);
-const isFullScreen = computed(() => useRoute().query.fullscreen === 'true');
+const route = useRoute();
+const isFullScreen = computed(() => route.query.fullscreen === 'true');
 
 // Clustering Control
 const clusteringEnabled = ref(true);
 const currentZoom = ref(0);
+const userHasInteractedWithClustering = ref(false);
+const recentZoomActions = ref<{ timestamp: number; zoom: number; action: 'in' | 'out' }[]>([]);
+const mapInteractionCount = ref(0);
+const zoomWarningDismissed = ref(false);
 
 // Computed property to determine if clustering should be active based on zoom and user preference
 const shouldCluster = computed(() => {
@@ -80,7 +104,52 @@ const shouldCluster = computed(() => {
 
 // Show status when clustering is disabled by user but forced ON due to zoom
 const showAutoDisabledStatus = computed(() => {
-  return !clusteringEnabled.value && currentZoom.value < 12;
+  return !clusteringEnabled.value && currentZoom.value < 12 && !zoomWarningDismissed.value;
+});
+
+// Detect when user might want to see individual markers
+const shouldSuggestDeclustering = computed(() => {
+  if (userHasInteractedWithClustering.value || currentZoom.value < 12) {
+    return false;
+  }
+  
+  // Check for rapid zoom-in behavior (suggests user wants detail)
+  const now = Date.now();
+  const recentZooms = recentZoomActions.value.filter(action => now - action.timestamp < 10000); // Last 10 seconds
+  const rapidZoomIns = recentZooms.filter(action => action.action === 'in').length;
+  
+  // Suggest if user has zoomed in multiple times and is at a level where they can see individual markers
+  return rapidZoomIns >= 2 && currentZoom.value >= 14 && clusteringEnabled.value;
+});
+
+// Unified status bar logic
+const showStatusBar = computed(() => {
+  return showAutoDisabledStatus.value || shouldSuggestDeclustering.value;
+});
+
+const statusBarIcon = computed(() => {
+  if (showAutoDisabledStatus.value) return 'mdi-information';
+  if (shouldSuggestDeclustering.value) return 'mdi-lightbulb-on';
+  return 'mdi-information';
+});
+
+const statusBarMessage = computed(() => {
+  if (showAutoDisabledStatus.value) {
+    return 'Camera grouping is on for performance at this zoom level.';
+  }
+  if (shouldSuggestDeclustering.value) {
+    return 'Want to see individual cameras? Try the grouping button.';
+  }
+  return '';
+});
+
+const statusBarCanDismiss = computed(() => {
+  return shouldSuggestDeclustering.value || showAutoDisabledStatus.value;
+});
+
+// Show button glow when status bar is giving hints about the button
+const shouldGlowButton = computed(() => {
+  return shouldSuggestDeclustering.value;
 });
 
 const props = defineProps({
@@ -298,7 +367,6 @@ function updateCurrentLocation(): void {
 
 function updateClusteringBehavior(): void {
   if (!clusterLayer || !map) return;
-  
   // Use shouldCluster computed value which handles both zoom and user preference
   const newDisableZoom = shouldCluster.value ? CLUSTER_DISABLE_ZOOM : 1;
   
@@ -325,8 +393,58 @@ function updateClusteringBehavior(): void {
   map.addLayer(clusterLayer);
 }
 
+// User Interaction Functions
+function onToggleChange(): void {
+  userHasInteractedWithClustering.value = true;
+  // Persist user preference
+  localStorage.setItem('deflock-clustering-preference', clusteringEnabled.value.toString());
+}
+
+function dismissSuggestion(): void {
+  userHasInteractedWithClustering.value = true;
+  // Don't show suggestions for the rest of this session
+  localStorage.setItem('deflock-clustering-preference', clusteringEnabled.value.toString());
+}
+
+function dismissZoomWarning(): void {
+  zoomWarningDismissed.value = true;
+}
+
+function dismissStatusBar(): void {
+  if (shouldSuggestDeclustering.value) {
+    dismissSuggestion();
+  } else if (showAutoDisabledStatus.value) {
+    dismissZoomWarning();
+  }
+}
+
+function trackZoomAction(action: 'in' | 'out'): void {
+  const now = Date.now();
+  recentZoomActions.value.push({
+    timestamp: now,
+    zoom: currentZoom.value,
+    action
+  });
+  
+  // Keep only recent actions (last 30 seconds)
+  recentZoomActions.value = recentZoomActions.value.filter(
+    actionItem => now - actionItem.timestamp < 30000
+  );
+}
+
+function trackMapInteraction(): void {
+  mapInteractionCount.value++;
+}
+
 // Lifecycle Hooks
 onMounted(() => {
+  // Initialize clustering preference from localStorage if available
+  const storedPreference = localStorage.getItem('deflock-clustering-preference');
+  if (storedPreference !== null) {
+    clusteringEnabled.value = storedPreference === 'true';
+    userHasInteractedWithClustering.value = true;
+  }
+  
   initializeMap();
 
   // Watch for clustering toggle
@@ -380,14 +498,35 @@ function registerMapEvents() {
       emit('update:center', map.getCenter());
       emit('update:zoom', map.getZoom());
       emit('update:bounds', map.getBounds());
+      trackMapInteraction();
     }
   });
   
   map.on('zoomend', () => {
     if (!isInternalUpdate.value) {
-      currentZoom.value = map.getZoom();
+      const oldZoom = currentZoom.value;
+      const newZoom = map.getZoom();
+      currentZoom.value = newZoom;
+      
+      // Reset zoom warning when user zooms in enough
+      if (newZoom >= 12) {
+        zoomWarningDismissed.value = false;
+      }
+      
+      // Track zoom direction for behavioral inference
+      if (newZoom > oldZoom) {
+        trackZoomAction('in');
+      } else if (newZoom < oldZoom) {
+        trackZoomAction('out');
+      }
+      
+      trackMapInteraction();
     }
   });
+  
+  // Track general map interactions
+  map.on('click', trackMapInteraction);
+  map.on('drag', trackMapInteraction);
 }
 </script>
 
@@ -411,6 +550,13 @@ function registerMapEvents() {
   z-index: 1000;
 }
 
+.topright {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
 .bottomright {
   position: absolute;
   bottom: 50px; /* hack */
@@ -420,16 +566,6 @@ function registerMapEvents() {
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
-}
-
-.clustering-toggle-btn {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-  position: absolute;
-  bottom: 50px;
-  right: 10px;
 }
 
 .clustering-status-bar {
@@ -450,6 +586,19 @@ function registerMapEvents() {
   min-width: 280px;
   max-width: 90vw;
   text-align: center;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .clustering-status-bar {
+    margin: 0 10px;
+    min-width: unset;
+    max-width: calc(100vw - 20px);
+  }
+
+  .topright {
+    top: 60px;
+  }
 }
 </style>
 
