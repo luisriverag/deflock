@@ -60,15 +60,29 @@
   <v-row class="mb-12">
     <v-col cols="12" md="10" lg="8" class="mx-auto">
       <v-card class="pa-6" elevation="3" rounded="lg" color="success" variant="tonal">
-        <div class="d-flex align-center mb-6">
-          <v-icon size="40" color="success" class="mr-3">mdi-trophy</v-icon>
-          <h3 class="text-h5 font-weight-bold">Timeline of Recent Victories</h3>
+        <div class="d-flex align-center justify-space-between mb-6">
+          <div class="d-flex align-center">
+            <v-icon size="40" color="success" class="mr-3">mdi-trophy</v-icon>
+            <h3 class="text-h5 font-weight-bold">Timeline of Recent Victories</h3>
+          </div>
+          <v-chip
+            color="success"
+            variant="elevated"
+            size="large"
+            class="font-weight-bold"
+          >
+            {{ citiesRejectingFlock.length }} Recent Wins
+          </v-chip>
         </div>
         
         <div class="timeline-container">
-          
           <!-- Timeline Items -->
-          <div v-for="city in citiesRejectingFlock" class="timeline-item">
+          <div 
+            v-for="(city, index) in (showAllVictories ? citiesRejectingFlock : citiesRejectingFlock.slice(0, 3))" 
+            :key="index"
+            class="timeline-item"
+            :class="{ 'timeline-item-last': index === (showAllVictories ? citiesRejectingFlock.length - 1 : 2) }"
+          >
             <div class="timeline-marker">
               <v-avatar size="48" color="success">
                 <v-icon color="white">mdi-check-bold</v-icon>
@@ -81,11 +95,40 @@
                   <v-chip size="small" color="grey" variant="outlined">{{ city.monthYear }}</v-chip>
                 </div>
                 <p v-html="city.descriptionHtml" class="text-body-2 mb-2" />
-                <v-chip size="small" color="success" variant="outlined">{{ city.outcome }}</v-chip>
+                <v-chip
+                  size="large"
+                  color="success"
+                  class="mt-4"
+                >
+                  <v-icon
+                    :icon="outcomeStyling[city.outcome].icon"
+                    class="mr-2"
+                  />
+                  {{ city.outcome }}
+                </v-chip>
+
+                <div v-if="city.outcomeNotes" class="mt-3">
+                  <v-alert type="info" variant="tonal" dense>
+                    {{ city.outcomeNotes }}
+                  </v-alert>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- Show More/Less Button -->
+          <div v-if="citiesRejectingFlock.length > 3" class="text-center mt-6">
+            <v-btn
+              @click="showAllVictories = !showAllVictories"
+              :prepend-icon="showAllVictories ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              color="success"
+              variant="outlined"
+              size="large"
+              class="font-weight-medium"
+            >
+              {{ showAllVictories ? 'Show Less' : `View All ${citiesRejectingFlock.length} Victories` }}
+            </v-btn>
+          </div>
         </div>
       </v-card>
     </v-col>
@@ -189,33 +232,22 @@
           Example Videos
         </h3>
         <v-row>
-          <v-col v-for="video in videos" :key="video.url" cols="12" md="6" class="mb-4">
+          <v-col v-for="video in videos" :key="video.url" cols="12" sm="6">
             <v-card 
-              class="video-card pa-6 d-flex flex-column align-center justify-center text-center"
-              elevation="3" 
+              class="video-card-compact pa-4 d-flex align-center"
+              elevation="2" 
               rounded="lg"
               hover
               @click="openVideo(video.url)"
             >
-              <div class="video-play-container mb-4">
-                <v-avatar size="80" color="red" class="video-play-button">
-                  <v-icon size="40" color="white">mdi-play</v-icon>
-                </v-avatar>
+              <v-avatar size="48" color="primary" class="mr-3 video-play-button-compact">
+                <v-icon size="24" color="white">mdi-play</v-icon>
+              </v-avatar>
+              
+              <div class="flex-grow-1">
+                <h4 class="text-body-1 font-weight-bold mb-0">{{ video.location }}</h4>
+                <p class="text-caption text-medium-emphasis mb-0">City Council Meeting</p>
               </div>
-              
-              <h4 class="text-h5 font-weight-bold mb-2">{{ video.location }}</h4>
-              <p class="text-body-2 text-medium-emphasis mb-4">{{ video.description }}</p>
-              
-              <v-btn
-                color="red"
-                variant="outlined"
-                size="large"
-                prepend-icon="mdi-youtube"
-                class="mt-auto"
-                @click.stop="openVideo(video.url)"
-              >
-                Watch on YouTube
-              </v-btn>
             </v-card>
           </v-col>
         </v-row>
@@ -230,17 +262,35 @@
 <script setup lang="ts">
 import Hero from '@/components/layout/Hero.vue';
 import Footer from '@/components/layout/Footer.vue';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useTheme } from 'vuetify';
 
 const theme = useTheme();
 const isDark = computed(() => theme.name.value === 'dark');
 
+// Reactive variable for showing all victories
+const showAllVictories = ref(false);
+
+enum Outcome {
+  ContractRejected = "Contract Rejected",
+  ContractCanceled = "Contract Canceled",
+  CamerasDeactivated = "Cameras Deactivated",
+  Other = "Other"
+}
+
+const outcomeStyling = {
+  [Outcome.ContractRejected]: { color: "red", icon: "mdi-file-cancel-outline" },
+  [Outcome.ContractCanceled]: { color: "orange", icon: "mdi-file-cancel-outline" },
+  [Outcome.CamerasDeactivated]: { color: "yellow", icon: "mdi-eye-off" },
+  [Outcome.Other]: { color: "grey", icon: "mdi-help-circle" }
+};
+
 interface CityRejection {
   cityState: string;
   monthYear: string;
   descriptionHtml: string;
-  outcome: string;
+  outcome: Outcome;
+  outcomeNotes?: string;
 }
 
 const citiesRejectingFlock: CityRejection[] = [
@@ -248,37 +298,74 @@ const citiesRejectingFlock: CityRejection[] = [
     cityState: "Denver, CO",
     monthYear: "May 2025",
     descriptionHtml: 'City council <a href="https://denverite.com/2025/05/05/denver-rejects-flock-camera-license-plate-readers/" target="_blank">voted unanimously</a> to reject the $666,000 contract extension with Flock Safety after public pushback and concerns over privacy, civil liberties, and sharing data with federal agencies.',
-    outcome: 'Contract Rejected'
+    outcome: Outcome.ContractRejected,
+    outcomeNotes: 'Despite city council rejecting the contract extension, Mayor Johnston went against the council and signed an extension of the contract himself just below the cost threshold required for council approval.'
   },
   {
     cityState: "Austin, TX",
     monthYear: "June 2025",
     descriptionHtml: 'City council <a target="_blank" href="https://www.eff.org/deeplinks/2025/06/victory-austin-organizers-cancel-citys-flock-alpr-contract">voted to block the renewal</a> of Austin\'s contract with Flock Safety after controversial uses for the system, violations of department policy, and contract language that went against council mandates on data retention.',
-    outcome: 'Contract Rejected'
+    outcome: Outcome.ContractRejected
   },
   {
     cityState: "Oak Park, IL",
     monthYear: "August 2025",
     descriptionHtml: 'City council voted to cancel its contract with Flock Safety following a state investigation of the system\'s data sharing practices, <a href="https://www.oakpark.com/2025/08/07/oak-park-terminates-flock-license-plate-reader-contract/" target="_blank">which enabled violations of state law</a>.',
-    outcome: 'Contract Canceled'
+    outcome: Outcome.ContractCanceled
   },
   {
     cityState: "Evanston, IL",
     monthYear: "August 2025",
     descriptionHtml: 'The City of Evanston ended its contract with Flock Safety and requested the deactivation of the cameras following an audit by the Secretary of State showing the company was <a target="_blank" href="https://evanstonroundtable.com/2025/08/26/evanston-shuts-down-license-plate-cameras-terminates-contract-with-flock-safety/">violating state law</a> by sharing Illinois data with federal agencies. Flock then <a target="_blank" href="https://evanstonroundtable.com/2025/09/24/flock-safety-reinstalls-evanston-cameras/">reinstalled the cameras against the city\'s wishes</a>, prompting a cease-and-desist by the city.',
-    outcome: 'Contract Canceled',
+    outcome: Outcome.ContractCanceled,
   },
   {
     cityState: "Louisville, CO",
     monthYear: "August 2025",
     descriptionHtml: 'The City of Louisville deactivated its cameras after a community member found that the system <a target="_blank" href="https://www.cbsnews.com/colorado/news/license-plate-reading-cameras-colorado-regulation-misuse/">was severely misrepresented</a> in both its data sharing practices and its capabilities.',
-    outcome: 'Cameras Deactivated'
+    outcome: Outcome.CamerasDeactivated
   },
   {
     cityState: "Sedona, AZ",
     monthYear: "September 2025",
     descriptionHtml: 'City council voted unanimously to end their contract with Flock Safety after council members claimed they were <a href="https://www.knau.org/knau-and-arizona-news/2025-09-11/sedona-council-permanently-ends-license-plate-camera-program" target="_blank">misled and lied to</a> about the system\'s data sharing features.',
-    outcome: 'Contract Canceled'
+    outcome: Outcome.ContractCanceled
+  },
+  {
+    cityState: "Eugene, OR",
+    monthYear: "October 2025",
+    descriptionHtml: 'City council voted unanimously to <a target="_blank" href="https://www.klcc.org/politics-government/2025-10-08/eugene-city-council-asks-to-turn-flock-cameras-off-amidst-fears-of-federal-misuse">pause the use of their Flock system</a> over concerns about data collection, data sharing, and compliance with city policies.',
+    outcome: Outcome.CamerasDeactivated
+  },
+  {
+    cityState: "Stanwood, WA",
+    monthYear: "September 2025",
+    descriptionHtml: 'The City of Stanwood <a target="_blank" href="https://www.goskagit.com/scnews/scnews/stanwood-s-flock-cameras-shut-off-due-to-legal-dispute-over-public-records-access/article_b7e05878-7ed2-4500-bc3b-fd586edc65ba.html">decided to shut off its Flock cameras</a> pending a court judgment on whether data collected by Flock cameras are considered public records.',
+    outcome: Outcome.CamerasDeactivated,
+  },
+  {
+    cityState: "Gig Harbor, WA",
+    monthYear: "March 2025",
+    descriptionHtml: 'City council voted against a contract with Flock Safety after <a target="_blank" href="https://www.thenewstribune.com/news/local/community/gateway/g-news/article302729359.html">community members raised concerns</a> about privacy, civil liberties, and data sharing.',
+    outcome: Outcome.ContractRejected
+  },
+  {
+    cityState: "Elbert County, CO",
+    monthYear: "December 2024",
+    descriptionHtml: 'The Elbert County Board of County Commissioners <a target="_blank" href="https://www.denvergazette.com/2024/02/17/big-brother-or-crime-fighter-elbert-county-says-no-to-license-plate-readers-521d798c-caac-11ee-a37b-7b0672ff5019/">unanimously voted not to renew its contract with Flock Safety</a> after concerns of government overreach.',
+    outcome: Outcome.ContractRejected
+  },
+  {
+    cityState: "Eureka, CA",
+    monthYear: "February 2025",
+    descriptionHtml: 'City council <a target="_blank" href="https://lostcoastoutpost.com/2025/feb/5/no-license-plate-reading-cameras/">voted unanimously to reject a contract with Flock Safety</a> after hearing community concerns about privacy, civil liberties, and data sharing with federal agencies.',
+    outcome: Outcome.ContractRejected
+  },
+  {
+    cityState: "Scarsdale, NY",
+    monthYear: "August 2025",
+    descriptionHtml: 'The Village of Scarsdale <a target="_blank" href="https://ij.org/press-release/public-interest-law-firm-applauds-westchester-county-village-for-ending-license-plate-reader-contract/">terminated its contract with Flock Safety</a> after over 450 community members signed a petition, expressing concerns over privacy and the system\'s data sharing practices.',
+    outcome: Outcome.ContractCanceled,
   }
 ].sort((a, b) => {
   const [aMonth, aYear] = a.monthYear.split(/\s/);
@@ -291,20 +378,25 @@ const citiesRejectingFlock: CityRejection[] = [
 const videos = [
   {
     location: "Flagstaff, AZ",
-    url: "https://youtu.be/6L6UlDJFYWk?si=gt_mU5rvayn1KCKi",
-    description: "Community members address privacy concerns, constitutional rights, and local impacts at city council meeting."
+    url: "https://youtu.be/6L6UlDJFYWk"
   },
   {
-    location: "Eugene, OR",
-    url: "https://youtu.be/FpXyS0dqUSM?si=0F8ZlijJYY_j7UjL&t=96",
-    description: "Residents discuss fiscal responsibility and effectiveness of ALPR surveillance systems."
+    location: "Eugene, OR (1)",
+    url: "https://youtu.be/FpXyS0dqUSM"
   },
   {
     location: "Denver, CO",
-    url: "https://youtu.be/YjaH_1Ia6NA?si=470JU6kqwk-vdXl0",
-    description: "Council member discusses the impact of mass surveillance technology on civil liberties."
+    url: "https://youtu.be/YjaH_1Ia6NA"
   },
-];
+  {
+    location: "Coralville, IA",
+    url: "http://coralvision.cablecast.tv:8080/internetchannel/show/2643?seekto=312&channel=1"
+  },
+  {
+    location: "Eugene, OR (2)",
+    url: "https://drive.google.com/file/d/1d49xph-LJsbTzbc9WOYo8bvB8l2260s5/view?usp=drivesdk"
+  }
+].sort((a, b) => a.location.localeCompare(b.location));
 
 const openVideo = (url: string) => {
   window.open(url, '_blank');
@@ -399,6 +491,9 @@ const openVideo = (url: string) => {
 .timeline-item {
   position: relative;
   padding-bottom: 32px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.4s ease-in-out;
 }
 
 .timeline-item-last {
@@ -473,6 +568,31 @@ const openVideo = (url: string) => {
   box-shadow: 0 12px 30px rgba(244, 67, 54, 0.2) !important;
 }
 
+/* Compact Video Card Styles */
+.video-card-compact {
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  min-height: 80px;
+}
+
+.video-card-compact:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: var(--v-theme-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.video-play-button-compact {
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.video-card-compact:hover .video-play-button-compact {
+  transform: scale(1.05);
+}
+
 .video-play-container {
   position: relative;
 }
@@ -518,5 +638,16 @@ const openVideo = (url: string) => {
 
 .v-theme--dark .video-card:hover {
   box-shadow: 0 12px 30px rgba(244, 67, 54, 0.3) !important;
+}
+
+.v-theme--dark .video-card-compact {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.v-theme--dark .video-card-compact:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--v-theme-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 </style>
