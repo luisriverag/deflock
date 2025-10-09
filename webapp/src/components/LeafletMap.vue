@@ -7,9 +7,52 @@
       <slot name="topleft"></slot>
     </div>
 
+    <div class="topright">
+      <!-- Clustering Toggle Switch -->
+      <v-card v-if="!isFullScreen" variant="elevated">
+        <v-card-text class="py-0">
+          <div class="d-flex align-center">
+            <v-icon size="small" class="mr-2">mdi-chart-bubble</v-icon>
+            <span class="text-caption mr-2">Grouping</span>
+            <v-switch
+              v-model="clusteringEnabled"
+              :disabled="currentZoom < 12"
+              hide-details
+              density="compact"
+              color="primary"
+              class="mx-1"
+            />
+          </div>
+        </v-card-text>
+      </v-card>
+    </div>
+
     <div class="bottomright">
       <slot name="bottomright"></slot>
     </div>
+    
+    <!-- Status Bar for Zoom Warning -->
+    <v-slide-y-transition>
+      <div 
+        v-if="showAutoDisabledStatus" 
+        class="clustering-status-bar"
+      >
+        <v-icon size="small" class="mr-2">mdi-information</v-icon>
+        <span class="text-caption">
+          Camera grouping is on for performance at this zoom level.
+        </span>
+        <v-btn 
+          size="x-small" 
+          icon
+          variant="text" 
+          color="white"
+          class="ml-2"
+          @click="dismissZoomWarning"
+        >
+          <v-icon size="small">mdi-close</v-icon>
+        </v-btn>
+      </div>
+    </v-slide-y-transition>
   </div>
 </template>
 
@@ -28,11 +71,33 @@ import 'leaflet.markercluster/dist/MarkerCluster.css';
 import { useTheme } from 'vuetify';
 
 const MARKER_COLOR = 'rgb(63,84,243)';
+const CLUSTER_DISABLE_ZOOM = 16; // Clustering disabled at zoom 16 and above
 
 // Internal State Management
 const markerMap = new Map<string, Marker | CircleMarker>();
 const isInternalUpdate = ref(false);
-const isFullScreen = computed(() => useRoute().query.fullscreen === 'true');
+const route = useRoute();
+const isFullScreen = computed(() => route.query.fullscreen === 'true');
+
+// Clustering Control
+const clusteringEnabled = ref(true);
+const currentZoom = ref(0);
+const zoomWarningDismissed = ref(false);
+
+// Computed property to determine if clustering should be active based on zoom and user preference
+const shouldCluster = computed(() => {
+  // Force clustering ON when zoomed out (below zoom 12) regardless of user preference
+  if (currentZoom.value < 12) {
+    return true;
+  }
+  // At higher zoom levels, respect user preference
+  return clusteringEnabled.value && currentZoom.value < CLUSTER_DISABLE_ZOOM;
+});
+
+// Show status when clustering is disabled by user but forced ON due to zoom
+const showAutoDisabledStatus = computed(() => {
+  return !clusteringEnabled.value && currentZoom.value < 12 && !zoomWarningDismissed.value;
+});
 
 const props = defineProps({
   center: {
@@ -183,7 +248,7 @@ function initializeMap() {
 
   clusterLayer = L.markerClusterGroup({
     chunkedLoading: true,
-    disableClusteringAtZoom: 16,
+    disableClusteringAtZoom: shouldCluster.value ? CLUSTER_DISABLE_ZOOM : 1,
     removeOutsideVisibleBounds: true,
     maxClusterRadius: 60,
     spiderfyOnEveryZoom: false,
@@ -192,6 +257,9 @@ function initializeMap() {
 
   circlesLayer = L.featureGroup();
   currentLocationLayer = L.featureGroup();
+
+  // Initialize current zoom
+  currentZoom.value = props.zoom;
 
   map.addLayer(clusterLayer);
   registerMapEvents();
@@ -244,9 +312,51 @@ function updateCurrentLocation(): void {
   }
 }
 
+function updateClusteringBehavior(): void {
+  if (!clusterLayer || !map) return;
+  // Use shouldCluster computed value which handles both zoom and user preference
+  const newDisableZoom = shouldCluster.value ? CLUSTER_DISABLE_ZOOM : 1;
+  
+  // Remove the cluster layer, update its options, and re-add it
+  if (map.hasLayer(clusterLayer)) {
+    map.removeLayer(clusterLayer);
+  }
+  
+  // Create new cluster layer with updated settings
+  const newClusterLayer = L.markerClusterGroup({
+    chunkedLoading: true,
+    disableClusteringAtZoom: newDisableZoom,
+    removeOutsideVisibleBounds: true,
+    maxClusterRadius: 60,
+    spiderfyOnEveryZoom: false,
+    spiderfyOnMaxZoom: false,
+  });
+  
+  // Transfer all markers to the new cluster layer
+  newClusterLayer.addLayer(circlesLayer);
+  
+  // Replace the old cluster layer
+  clusterLayer = newClusterLayer;
+  map.addLayer(clusterLayer);
+}
+
+function dismissZoomWarning(): void {
+  zoomWarningDismissed.value = true;
+}
+
 // Lifecycle Hooks
 onMounted(() => {
   initializeMap();
+
+  // Watch for clustering toggle
+  watch(clusteringEnabled, () => {
+    updateClusteringBehavior();
+  });
+  
+  // Watch for zoom-based clustering changes
+  watch(shouldCluster, () => {
+    updateClusteringBehavior();
+  });
 
   // Watch for prop changes
   watch(() => props.center, (newCenter: any) => {
@@ -262,6 +372,7 @@ onMounted(() => {
   watch(() => props.zoom, (newZoom: number) => {
     if (!isInternalUpdate.value) {
       isInternalUpdate.value = true;
+      currentZoom.value = newZoom;
       map.setZoom(newZoom);
       setTimeout(() => {
         isInternalUpdate.value = false;
@@ -290,6 +401,19 @@ function registerMapEvents() {
       emit('update:bounds', map.getBounds());
     }
   });
+  
+  map.on('zoomend', () => {
+    if (!isInternalUpdate.value) {
+      const oldZoom = currentZoom.value;
+      const newZoom = map.getZoom();
+      currentZoom.value = newZoom;
+      
+      // Reset zoom warning when user zooms in enough
+      if (newZoom >= 12) {
+        zoomWarningDismissed.value = false;
+      }
+    }
+  });
 }
 </script>
 
@@ -313,11 +437,55 @@ function registerMapEvents() {
   z-index: 1000;
 }
 
+.topright {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
 .bottomright {
   position: absolute;
   bottom: 50px; /* hack */
   right: 60px; /* hack */
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.clustering-status-bar {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(33, 33, 33, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  min-width: 280px;
+  max-width: 90vw;
+  text-align: center;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .clustering-status-bar {
+    margin: 0 10px;
+    min-width: unset;
+    max-width: calc(100vw - 20px);
+  }
+
+  .topright {
+    top: 60px;
+  }
 }
 </style>
 

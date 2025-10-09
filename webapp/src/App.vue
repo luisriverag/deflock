@@ -7,7 +7,6 @@ import { useDiscordIntercept } from '@/composables/useDiscordIntercept';
 
 const theme = useTheme();
 const router = useRouter();
-const snackbar = ref({ show: false, text: '' });
 const isDark = computed(() => theme.name.value === 'dark');
 const isFullscreen = computed(() => router.currentRoute.value?.query.fullscreen === 'true');
 const { showDialog, discordUrl, interceptDiscordLinks } = useDiscordIntercept();
@@ -16,13 +15,6 @@ function toggleTheme() {
   const newTheme = theme.global.name.value === 'dark' ? 'light' : 'dark';
   theme.global.name.value = newTheme;
   localStorage.setItem('theme', newTheme);
-
-  if (newTheme === 'dark' && router.currentRoute.value.path === '/map') {
-    snackbar.value = {
-      show: true,
-      text: "Dark maps aren't available yet :("
-    };
-  }
 }
 
 function handleDiscordProceed(url: string) {
@@ -236,24 +228,6 @@ watch(() => theme.global.name.value, (newTheme) => {
     <v-main>
       <RouterView />
     </v-main>
-
-    <v-snackbar
-      close-delay="2000"
-      v-model="snackbar.show"
-      color="grey-darken-3"
-    >
-      <v-icon start>mdi-theme-light-dark</v-icon>
-      {{ snackbar.text }}
-      <template v-slot:actions>
-        <v-btn
-          color="blue"
-          variant="text"
-          @click="snackbar.show = false"
-        >
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </template>
-    </v-snackbar>
 
     <DiscordWarningDialog
       v-model="showDialog"
