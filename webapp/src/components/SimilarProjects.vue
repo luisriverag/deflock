@@ -130,6 +130,12 @@ const similarProjects: SimilarProject[] = [
     url: "https://atlasofsurveillance.org/atlas",
     imageUrl: "/similar-projects/eff-atlas.webp"
   },
+  {
+    name: "Plate Privacy",
+    description: "The Institute for Justice's site analyzing ALPR usage patterns in the US.",
+    url: "https://plateprivacy.com",
+    imageUrl: "/similar-projects/plate-privacy.webp"
+  }
 ]
 </script>
 
