@@ -317,7 +317,7 @@ const citiesRejectingFlock: CityRejection[] = [
     cityState: "Evanston, IL",
     monthYear: "August 2025",
     descriptionHtml: 'The City of Evanston ended its contract with Flock Safety and requested the deactivation of the cameras following an audit by the Secretary of State showing the company was <a target="_blank" href="https://evanstonroundtable.com/2025/08/26/evanston-shuts-down-license-plate-cameras-terminates-contract-with-flock-safety/">violating state law</a> by sharing Illinois data with federal agencies. Flock then <a target="_blank" href="https://evanstonroundtable.com/2025/09/24/flock-safety-reinstalls-evanston-cameras/">reinstalled the cameras against the city\'s wishes</a>, prompting a cease-and-desist by the city.',
-    outcome: Outcome.ContractCanceled,
+    outcome: Outcome.ContractCanceled
   },
   {
     cityState: "Louisville, CO",
@@ -332,6 +332,12 @@ const citiesRejectingFlock: CityRejection[] = [
     outcome: Outcome.ContractCanceled
   },
   {
+    cityState: "Lockhart, TX",
+    monthYear: "October 2025",
+    descriptionHtml: 'City council <a target="_blank" href="https://www.kxan.com/news/local/caldwell-county/lockhart-city-council-rejects-flock-ai-cameras-in-6-1-vote/">voted 6-1 to reject a contract with Flock Safety</a> after an overwhelmingly negative public response, citing privacy concerns, government overreach, poor use of taxpayer money, and concerns with data sharing.',
+    outcome: Outcome.ContractRejected
+  },
+  {
     cityState: "Eugene, OR",
     monthYear: "October 2025",
     descriptionHtml: 'City council voted unanimously to <a target="_blank" href="https://www.klcc.org/politics-government/2025-10-08/eugene-city-council-asks-to-turn-flock-cameras-off-amidst-fears-of-federal-misuse">pause the use of their Flock system</a> over concerns about data collection, data sharing, and compliance with city policies.',
@@ -341,7 +347,7 @@ const citiesRejectingFlock: CityRejection[] = [
     cityState: "Stanwood, WA",
     monthYear: "September 2025",
     descriptionHtml: 'The City of Stanwood <a target="_blank" href="https://www.goskagit.com/scnews/scnews/stanwood-s-flock-cameras-shut-off-due-to-legal-dispute-over-public-records-access/article_b7e05878-7ed2-4500-bc3b-fd586edc65ba.html">decided to shut off its Flock cameras</a> pending a court judgment on whether data collected by Flock cameras are considered public records.',
-    outcome: Outcome.CamerasDeactivated,
+    outcome: Outcome.CamerasDeactivated
   },
   {
     cityState: "Gig Harbor, WA",
@@ -365,7 +371,7 @@ const citiesRejectingFlock: CityRejection[] = [
     cityState: "Scarsdale, NY",
     monthYear: "August 2025",
     descriptionHtml: 'The Village of Scarsdale <a target="_blank" href="https://ij.org/press-release/public-interest-law-firm-applauds-westchester-county-village-for-ending-license-plate-reader-contract/">terminated its contract with Flock Safety</a> after over 450 community members signed a petition, expressing concerns over privacy and the system\'s data sharing practices.',
-    outcome: Outcome.ContractCanceled,
+    outcome: Outcome.ContractCanceled
   }
 ].sort((a, b) => {
   const [aMonth, aYear] = a.monthYear.split(/\s/);
@@ -395,6 +401,10 @@ const videos = [
   {
     location: "Eugene, OR (2)",
     url: "https://drive.google.com/file/d/1d49xph-LJsbTzbc9WOYo8bvB8l2260s5/view?usp=drivesdk"
+  },
+  {
+    location: "Lockhart, TX",
+    url: "https://lockharttx.new.swagit.com/videos/357764?ts=4437"
   }
 ].sort((a, b) => a.location.localeCompare(b.location));
 
