@@ -39,7 +39,6 @@
               <v-card-actions class="justify-center pb-6">
                 <v-btn
                   color="primary"
-                  variant="contained"
                   size="large"
                   append-icon="mdi-arrow-right"
                 >
@@ -77,7 +76,6 @@
                 <div v-if="!showContactOptions">
                   <v-btn
                     color="secondary"
-                    variant="contained"
                     size="large"
                     append-icon="mdi-arrow-right"
                   >
