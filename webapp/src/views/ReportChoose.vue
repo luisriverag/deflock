@@ -68,9 +68,11 @@
       <v-col cols="12" md="5" class="pa-4">
         <div class="app-card-container">
           <v-card
-            class="mx-auto h-100 d-flex flex-column app-card-disabled"
+            class="mx-auto h-100 d-flex flex-column"
+            :class="{ 'app-card-disabled': !isIosAppEnabled }"
             elevation="4"
-            :class="{ 'card-disabled': true }"
+            :hover="isIosAppEnabled"
+            :to="isIosAppEnabled ? '/app' : undefined"
           > 
             <v-card-item class="bg-green-darken-3">
               <v-card-title class="text-h5 font-weight-bold text-white">
@@ -93,16 +95,17 @@
                 color="green-darken-2"
                 variant="elevated"
                 size="large"
-                disabled
+                :disabled="!isIosAppEnabled"
+                :to="isIosAppEnabled ? '/app' : undefined"
               >
-                Download App
+                {{ isIosAppEnabled ? 'Download App' : 'Download App' }}
                 <v-icon icon="mdi-arrow-right" end></v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
           
           <!-- Coming Soon Banner -->
-          <div class="coming-soon-banner">
+          <div v-if="shouldShowComingSoon" class="coming-soon-banner">
             <v-chip
               color="warning"
               variant="elevated"
@@ -121,6 +124,14 @@
 
 <script setup lang="ts">
 import ALPRVerificationDialog from '@/components/ALPRVerificationDialog.vue';
+import { useFeatureFlags } from '@/composables/useFeatureFlags';
+import { computed } from 'vue';
+
+const { flags } = useFeatureFlags();
+
+// Computed properties for iOS app state
+const isIosAppEnabled = computed(() => flags.value?.iosApp.enabled ?? false);
+const shouldShowComingSoon = computed(() => !isIosAppEnabled.value);
 </script>
 
 <style scoped>
@@ -138,7 +149,7 @@ import ALPRVerificationDialog from '@/components/ALPRVerificationDialog.vue';
   position: relative;
 }
 
-.card-disabled {
+.app-card-disabled {
   opacity: 0.7;
   pointer-events: none;
   cursor: not-allowed;

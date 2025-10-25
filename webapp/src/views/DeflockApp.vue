@@ -40,6 +40,20 @@
                   <span v-if="appLinks.android">Get on Android</span>
                   <span v-else>Android Coming Soon</span>
                 </v-btn>
+                
+                <!-- Documentation Link -->
+                <v-btn
+                  size="large"
+                  variant="text"
+                  color="white"
+                  href="https://blog.deflock.me/deflock-mobile-guide/"
+                  target="_blank"
+                  prepend-icon="mdi-book-open-variant"
+                  class="download-btn doc-btn"
+                >
+                  View Mobile App Guide
+                  <v-icon icon="mdi-open-in-new" size="small" class="ml-1" />
+                </v-btn>
               </div>
             </div>
           </v-col>
@@ -217,7 +231,10 @@
 
 <script setup lang="ts">
 import Footer from '@/components/layout/Footer.vue';
+import { useFeatureFlags } from '@/composables/useFeatureFlags';
 import { ref, computed } from 'vue';
+
+const { flags } = useFeatureFlags();
 
 interface Feature {
   id: number;
@@ -252,10 +269,10 @@ interface PrivacyPrinciple {
   description: string;
 }
 
-const appLinks = {
+const appLinks = computed(() => ({
   android: 'https://play.google.com/store/apps/details?id=me.deflock.deflockapp',
-  ios: undefined,
-}
+  ios: flags.value?.iosApp.enabled ? flags.value.iosApp.appUrl : undefined,
+}));
 
 // App features
 const features: Feature[] = [
@@ -473,6 +490,17 @@ const visibleScreenshots = computed(() =>
 .android-btn {
   border: 2px solid white;
   color: white !important;
+}
+
+.doc-btn {
+  color: white !important;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}
+
+.doc-btn:hover {
+  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .hero-image {
